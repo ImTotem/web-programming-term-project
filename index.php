@@ -42,10 +42,38 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
                     <a class="button secondary" href="db/schema.sql">DB 스키마 보기</a>
                 </div>
             </div>
-            <div class="score-card" aria-label="추천 점수 예시">
-                <span>추천 점수</span>
-                <strong>4.62</strong>
-                <p>평균 평점, 재방문 의사, 상황 태그를 조합해 계산</p>
+            <div class="mockup-stage" aria-label="우리들의 맛집 지도 화면 미리보기">
+                <div class="desktop-mockup">
+                    <div class="mockup-toolbar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="mock-map">
+                            <span class="pin pin-a"></span>
+                            <span class="pin pin-b"></span>
+                            <span class="pin pin-c"></span>
+                            <div class="route-line"></div>
+                        </div>
+                        <div class="mock-sidebar">
+                            <span class="badge">추천 점수</span>
+                            <strong>4.62</strong>
+                            <p>우리 그룹의 평점, 재방문 의사, 상황 태그를 조합합니다.</p>
+                            <div class="mini-list">
+                                <span>약속</span>
+                                <span>조용한 곳</span>
+                                <span>재방문 높음</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone-mockup">
+                    <span class="phone-bar"></span>
+                    <strong>오늘 뭐 먹지?</strong>
+                    <p>후보 12곳 중 우리 취향에 맞는 장소를 추천합니다.</p>
+                    <button type="button">추천 보기</button>
+                </div>
             </div>
         </section>
 
@@ -119,6 +147,9 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
                 <span>tags</span>
                 <span>restaurant_tags</span>
             </div>
+            <pre class="code-block"><code>추천 점수 = 구성원 평균 점수 * 0.6
+          + 재방문 점수 * 0.3
+          + 태그 일치 점수 * 0.5</code></pre>
         </section>
     </main>
 
