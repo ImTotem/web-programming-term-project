@@ -458,13 +458,13 @@ main {
 .map-action-panel {
     position: absolute;
     left: 16px;
-    right: 16px;
     bottom: 16px;
+    width: min(calc(100% - 32px), 360px);
     display: grid;
-    gap: 12px;
+    gap: 10px;
     border: 1px solid rgba(220, 222, 224, 0.94);
     border-radius: var(--radius-lg);
-    padding: 14px;
+    padding: 12px;
     background: rgba(255, 255, 255, 0.94);
     box-shadow: 0 18px 48px rgba(23, 23, 23, 0.14);
     backdrop-filter: blur(18px);
@@ -493,7 +493,7 @@ main {
 .map-action-panel strong {
     display: block;
     color: var(--ink);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.35;
 }
@@ -501,7 +501,7 @@ main {
 .map-action-panel p {
     margin: 4px 0 0;
     color: var(--body);
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.45;
 }
 
@@ -512,14 +512,14 @@ main {
 }
 
 .map-action-row button {
-    min-height: 34px;
+    min-height: 32px;
     border: 1px solid var(--hairline-strong);
     border-radius: var(--radius-md);
     padding: 8px 10px;
     background: var(--surface-card);
     color: var(--ink);
     font: inherit;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
     cursor: pointer;
@@ -589,6 +589,90 @@ main {
     color: var(--muted);
     font-size: 11px;
     line-height: 1.4;
+}
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(23, 23, 23, 0.26);
+    z-index: 30;
+}
+
+.modal-backdrop[hidden] {
+    display: none;
+}
+
+.modal-card {
+    width: min(100%, 520px);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    background: var(--surface-card);
+    box-shadow: 0 28px 90px rgba(23, 23, 23, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.icon-button {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-md);
+    background: var(--surface-card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.note-form {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    resize: vertical;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    background: var(--surface-card);
+}
+
+textarea:focus {
+    outline: 2px solid rgba(13, 116, 206, 0.24);
+    border-color: var(--text-link);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 label {

@@ -149,12 +149,10 @@ $currentUser = auth_current_user();
                     <div>
                         <span class="panel-kicker">선택한 장소</span>
                         <strong id="selected-place-name">검색 결과를 누르면 이곳에 분석 도구가 열립니다.</strong>
-                        <p id="selected-place-address">지도 위에서 미식 기록, 메뉴 사진, 별점 메모를 이어서 작성합니다.</p>
+                        <p id="selected-place-address">기록, 사진, 별점을 한 번에 남깁니다.</p>
                     </div>
                     <div class="map-action-row">
-                        <button type="button" data-action="write-visit-note">미식 기록</button>
-                        <button type="button" data-action="upload-menu-photo">메뉴 사진</button>
-                        <button type="button" data-action="write-rating-note">별점 메모</button>
+                        <button type="button" data-action="open-note-modal">기록 작성</button>
                         <button type="button" data-action="manual-place-mode">지도에서 직접 추가</button>
                     </div>
                 </div>
@@ -173,7 +171,6 @@ $currentUser = auth_current_user();
                             <option value="FD6">음식점</option>
                             <option value="CE7">카페</option>
                         </select>
-                        <p class="field-note">Kakao Local API는 카테고리 목록 조회 API를 제공하지 않습니다.</p>
                     </div>
                     <button type="submit">검색</button>
                 </form>
@@ -189,6 +186,43 @@ $currentUser = auth_current_user();
                 </section>
             </aside>
         </section>
+
+        <div id="place-note-modal" class="modal-backdrop" hidden>
+            <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="place-note-title">
+                <div class="modal-header">
+                    <div>
+                        <p class="eyebrow">Culinary Note</p>
+                        <h2 id="place-note-title">미식 기록 작성</h2>
+                    </div>
+                    <button type="button" class="icon-button" data-action="close-note-modal" aria-label="닫기">×</button>
+                </div>
+                <form class="note-form">
+                    <label for="note-menu">대표 메뉴</label>
+                    <input id="note-menu" name="menu" type="text" placeholder="예: 쇼유라멘, 트러플 감자튀김">
+
+                    <label for="note-text">미식 기록</label>
+                    <textarea id="note-text" name="note" rows="5" placeholder="맛의 인상, 식감, 향, 같이 먹은 메뉴 조합을 남겨보세요."></textarea>
+
+                    <label for="note-photo">메뉴 사진</label>
+                    <input id="note-photo" name="photo" type="file" accept="image/*">
+
+                    <label for="note-rating">별점</label>
+                    <select id="note-rating" name="rating">
+                        <option value="">선택 안 함</option>
+                        <option value="5">5점</option>
+                        <option value="4">4점</option>
+                        <option value="3">3점</option>
+                        <option value="2">2점</option>
+                        <option value="1">1점</option>
+                    </select>
+
+                    <div class="modal-actions">
+                        <button type="button" class="button secondary" data-action="close-note-modal">취소</button>
+                        <button type="button" class="button primary">저장 준비</button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </main>
     <?php endif; ?>
 

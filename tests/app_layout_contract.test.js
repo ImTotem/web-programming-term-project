@@ -52,18 +52,18 @@ assert(
 );
 
 assert(
-    /미식 기록/.test(index) && /메뉴 사진/.test(index),
-    'map actions should frame visits as culinary notes and menu photos'
+    /data-action="open-note-modal"/.test(index) && /id="place-note-modal"/.test(index),
+    'culinary note, menu photo, and rating should be collected in one modal'
 );
 
 assert(
-    /Kakao Local API는 카테고리 목록 조회 API를 제공하지 않습니다/.test(index),
-    'category source limitation should be documented in the UI copy'
+    !/Kakao Local API는 카테고리 목록 조회 API를 제공하지 않습니다/.test(index),
+    'category source limitation copy should not be shown in the app screen'
 );
 
 assert(
-    /data-action="write-visit-note"/.test(index) && /data-action="upload-menu-photo"/.test(index),
-    'review and photo actions should live in the map context, not the results list'
+    /width:\s*min\(calc\(100%\s*-\s*32px\),\s*360px\)/.test(css),
+    'map action panel should be compact instead of spanning the map width'
 );
 
 assert(

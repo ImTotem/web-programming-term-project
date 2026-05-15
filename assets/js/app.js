@@ -244,23 +244,36 @@
 
     function bindMapActions() {
         var manualButton = $('[data-action="manual-place-mode"]');
-        if (!manualButton) {
-            return;
+        var noteButton = $('[data-action="open-note-modal"]');
+        var modal = $('#place-note-modal');
+
+        if (manualButton) {
+            manualButton.addEventListener('click', function () {
+                manualMode = true;
+                var panel = $('#map-action-panel');
+                var title = $('#selected-place-name');
+                var description = $('#selected-place-address');
+
+                if (panel && title && description) {
+                    panel.classList.add('is-manual-mode');
+                    panel.classList.remove('is-empty');
+                    title.textContent = '지도에서 위치를 클릭하세요';
+                    description.textContent = '검색에 없는 가게도 지도에서 직접 지정할 수 있습니다.';
+                }
+            });
         }
 
-        manualButton.addEventListener('click', function () {
-            manualMode = true;
-            var panel = $('#map-action-panel');
-            var title = $('#selected-place-name');
-            var description = $('#selected-place-address');
+        if (noteButton && modal) {
+            noteButton.addEventListener('click', function () {
+                modal.hidden = false;
+            });
 
-            if (panel && title && description) {
-                panel.classList.add('is-manual-mode');
-                panel.classList.remove('is-empty');
-                title.textContent = '지도에서 위치를 클릭하세요';
-                description.textContent = '카카오 검색에 없는 가게도 지도의 한 지점을 직접 지정해 추가할 수 있습니다.';
-            }
-        });
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal || event.target.closest('[data-action="close-note-modal"]')) {
+                    modal.hidden = true;
+                }
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
