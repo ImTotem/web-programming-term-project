@@ -729,6 +729,8 @@ main {
 
 .file-upload-preview {
     margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-md);
     padding: 10px;
@@ -737,9 +739,11 @@ main {
 
 .file-upload-preview-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(88px, 104px));
-    justify-content: center;
+    grid-auto-flow: column;
+    grid-auto-columns: 104px;
+    justify-content: start;
     gap: 10px;
+    width: max-content;
 }
 
 .photo-preview-item {

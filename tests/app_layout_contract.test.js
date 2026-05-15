@@ -100,8 +100,13 @@ assert(
 );
 
 assert(
-    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app) && /minmax\(88px,\s*104px\)/.test(css),
+    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app) && /grid-auto-columns:\s*104px/.test(css),
     'uploaded photos should render multiple resized previews in the modal'
+);
+
+assert(
+    /overflow-x:\s*auto/.test(css) && /grid-auto-flow:\s*column/.test(css) && /grid-auto-columns:\s*104px/.test(css),
+    'uploaded photo previews should scroll horizontally instead of wrapping downward'
 );
 
 assert(
