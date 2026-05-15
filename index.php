@@ -130,15 +130,6 @@ $currentUser = auth_current_user();
     </main>
     <?php else: ?>
     <main class="app-shell">
-        <section class="app-intro">
-            <div>
-                <p class="eyebrow">Workspace</p>
-                <h2>오늘의 맛집 지도를 관리하세요</h2>
-                <p>지도는 그대로 두고, 검색 결과와 저장 후보만 옆에서 스크롤하며 비교합니다.</p>
-            </div>
-            <a class="button secondary" href="docs/tastemap-design.md">기획 문서</a>
-        </section>
-
         <?php if (!$hasKakaoJsKey): ?>
             <section class="notice">
                 <strong>카카오 JavaScript 키가 아직 없습니다.</strong>

@@ -402,32 +402,8 @@ main {
     background: var(--canvas);
 }
 
-.app-intro {
-    height: 84px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.app-intro h2 {
-    margin: 0;
-    color: var(--ink);
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0;
-}
-
-.app-intro p {
-    margin: 6px 0 0;
-    color: var(--body);
-    font-size: 14px;
-    line-height: 1.5;
-}
-
 .app-workspace {
-    height: calc(100vh - 64px - 124px);
+    height: calc(100vh - 64px - 40px);
     min-height: 560px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
@@ -437,7 +413,7 @@ main {
 .map-sticky-panel {
     min-height: 0;
     position: sticky;
-    top: 84px;
+    top: 20px;
 }
 
 .app-map {
@@ -830,13 +806,6 @@ select:focus {
     .app-shell {
         height: auto;
         overflow: visible;
-    }
-
-    .app-intro {
-        height: auto;
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 12px 0 20px;
     }
 
     .app-workspace {
