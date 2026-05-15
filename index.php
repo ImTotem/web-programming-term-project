@@ -9,7 +9,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= tastemap_h($config['app_name']) ?> - 우리만의 맛집 지도</title>
+    <title><?= tastemap_h($config['app_name']) ?></title>
     <link rel="stylesheet" href="<?= tastemap_asset('assets/css/style.css') ?>">
     <?php if ($hasKakaoJsKey): ?>
         <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<?= tastemap_h($config['kakao_javascript_key']) ?>&libraries=services"></script>
@@ -19,7 +19,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
     <header class="topbar">
         <div>
             <p class="eyebrow">Couple & Family Restaurant Map</p>
-            <h1>TasteMap</h1>
+            <h1>우리만의 맛집 지도</h1>
         </div>
         <nav class="nav">
             <a href="#features">기능</a>
@@ -128,4 +128,3 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
     <script src="<?= tastemap_asset('assets/js/app.js') ?>"></script>
 </body>
 </html>
-
