@@ -94,6 +94,8 @@ CREATE TABLE visits (
     group_id INT NOT NULL,
     restaurant_id INT NOT NULL,
     visit_date DATE NOT NULL,
+    menu_name VARCHAR(150) DEFAULT NULL,
+    rating DECIMAL(2,1) DEFAULT NULL,
     companions VARCHAR(255) DEFAULT NULL,
     total_price INT DEFAULT NULL,
     note TEXT,
@@ -109,6 +111,7 @@ CREATE TABLE visit_photos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     visit_id INT NOT NULL,
     file_path VARCHAR(255) NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_visit_photos_visit FOREIGN KEY (visit_id) REFERENCES visits(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

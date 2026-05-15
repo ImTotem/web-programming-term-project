@@ -242,7 +242,7 @@ $currentUser = auth_current_user();
 
                     <div class="modal-actions">
                         <button type="button" class="button secondary" data-action="close-note-modal">취소</button>
-                        <button type="button" class="button primary">저장 준비</button>
+                        <button type="submit" class="button primary" data-action="save-note">기록 저장</button>
                     </div>
                 </form>
             </section>

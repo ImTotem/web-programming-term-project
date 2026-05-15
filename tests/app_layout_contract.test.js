@@ -5,6 +5,9 @@ const index = fs.readFileSync('index.php', 'utf8');
 const css = fs.readFileSync('assets/css/style.css', 'utf8');
 const app = fs.readFileSync('assets/js/app.js', 'utf8');
 const profile = fs.existsSync('profile.php') ? fs.readFileSync('profile.php', 'utf8') : '';
+const schema = fs.readFileSync('db/schema.sql', 'utf8');
+const saveNoteApi = fs.existsSync('api/save_note.php') ? fs.readFileSync('api/save_note.php', 'utf8') : '';
+const notes = fs.existsSync('includes/notes.php') ? fs.readFileSync('includes/notes.php', 'utf8') : '';
 
 assert(
     /<option value="">전체<\/option>/.test(index),
@@ -37,6 +40,11 @@ assert(
 );
 
 assert(
+    /align-items:\s*center/.test(css) && /#result-count[\s\S]*line-height:\s*1/.test(css) && /\.side-section \.section-heading h3[\s\S]*margin:\s*0/.test(css),
+    'search result heading and total count should be vertically aligned'
+);
+
+assert(
     !/id="map-action-panel"/.test(index) && /id="map-fab-dock"/.test(index),
     'map actions should use a bottom-right floating action button instead of a wide panel'
 );
@@ -54,6 +62,21 @@ assert(
 assert(
     /data-action="primary-map-action"/.test(index) && /id="place-note-modal"/.test(index),
     'culinary note, menu photo, and rating should be collected in one modal'
+);
+
+assert(
+    /data-action="save-note"/.test(index) && /bindNoteForm/.test(app) && /api\/save_note\.php/.test(app),
+    'culinary note form should submit to a save API'
+);
+
+assert(
+    /menu_name VARCHAR\(150\)/.test(schema) && /rating DECIMAL\(2,1\)/.test(schema),
+    'visits table should store the representative menu and half-point rating'
+);
+
+assert(
+    /notes_save_visit/.test(saveNoteApi) && /INSERT INTO visits/.test(notes) && /INSERT INTO visit_photos/.test(notes) && /INSERT INTO restaurants/.test(notes),
+    'save note API should persist restaurant, visit, and uploaded photos'
 );
 
 assert(

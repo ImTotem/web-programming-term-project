@@ -995,13 +995,15 @@ select:focus {
 
 #result-count {
     flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
     border-radius: 9999px;
     padding: 4px 9px;
     background: var(--surface-strong);
     color: var(--body);
     font-size: 12px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1;
 }
 
 .side-section h3 {
@@ -1010,6 +1012,10 @@ select:focus {
     font-size: 18px;
     font-weight: 600;
     line-height: 1.4;
+}
+
+.side-section .section-heading h3 {
+    margin: 0;
 }
 
 #place-results {

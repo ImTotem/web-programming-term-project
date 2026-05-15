@@ -212,8 +212,15 @@
 
         map.setCenter(position);
         selectedPlace = {
+            id: 'manual_' + position.getLat().toFixed(6) + '_' + position.getLng().toFixed(6),
             place_name: '수동 지정 장소',
             road_address_name: '위도 ' + position.getLat().toFixed(6) + ', 경도 ' + position.getLng().toFixed(6),
+            address_name: '',
+            category_name: '수동 추가',
+            phone: '',
+            place_url: '',
+            x: String(position.getLng()),
+            y: String(position.getLat()),
             is_manual: true
         };
         selectedIndex = null;
@@ -330,6 +337,85 @@
                     modal.hidden = true;
                 }
             });
+        }
+    }
+
+    function bindNoteForm() {
+        var form = $('.note-form');
+        var saveButton = $('[data-action="save-note"]');
+
+        if (!form || !saveButton) {
+            return;
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (!selectedPlace) {
+                alert('기록할 장소를 먼저 선택하세요.');
+                return;
+            }
+
+            var formData = new FormData(form);
+            appendPlaceToFormData(formData, selectedPlace);
+
+            saveButton.disabled = true;
+            saveButton.textContent = '저장 중';
+
+            fetch('api/save_note.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(function (response) {
+                    return response.json().then(function (data) {
+                        if (!response.ok || !data.ok) {
+                            throw new Error(data.error || '기록 저장에 실패했습니다.');
+                        }
+                        return data;
+                    });
+                })
+                .then(function (data) {
+                    selectedPlace.has_record = true;
+                    selectedPlace.record_id = data.visit_id;
+                    updateFabState(selectedPlace);
+                    resetNoteForm(form);
+                    closeNoteModal();
+                    alert('미식 기록을 저장했습니다.');
+                })
+                .catch(function (error) {
+                    alert(error.message);
+                })
+                .finally(function () {
+                    saveButton.disabled = false;
+                    saveButton.textContent = '기록 저장';
+                });
+        });
+    }
+
+    function appendPlaceToFormData(formData, place) {
+        formData.set('kakao_place_id', place.id || '');
+        formData.set('place_name', place.place_name || '수동 지정 장소');
+        formData.set('category_name', place.category_name || '');
+        formData.set('address_name', place.address_name || '');
+        formData.set('road_address_name', place.road_address_name || '');
+        formData.set('phone', place.phone || '');
+        formData.set('place_url', place.place_url || '');
+        formData.set('latitude', place.y || '');
+        formData.set('longitude', place.x || '');
+    }
+
+    function resetNoteForm(form) {
+        form.reset();
+        selectedPhotoFiles = [];
+        syncPhotoInput($('#note-photo'));
+        showPhotoPreview([]);
+        setRatingValue(0, $('#note-rating'), $('#note-rating-label'), $('.star-rating'));
+    }
+
+    function closeNoteModal() {
+        var modal = $('#place-note-modal');
+        if (modal) {
+            modal.hidden = true;
         }
     }
 
@@ -577,13 +663,12 @@
     }
 
     function setRatingValue(value, rating, ratingLabel, starRating) {
-        if (!value || Number.isNaN(value)) {
+        if (Number.isNaN(value)) {
             return;
         }
 
-        rating.value = String(value);
-        ratingLabel.textContent = value.toFixed(1).replace(/\.0$/, '') + '점';
-        starRating.style.setProperty('--rating-percent', (value / 5 * 100) + '%');
+        rating.value = value ? String(value) : '';
+        ratingLabel.textContent = value ? value.toFixed(1).replace(/\.0$/, '') + '점' : '선택 안 함';
         starRating.querySelectorAll('[data-rating]').forEach(function (button) {
             button.setAttribute('aria-pressed', Number(button.dataset.rating) <= value ? 'true' : 'false');
         });
@@ -604,5 +689,6 @@
         bindMapActions();
         bindFileUpload();
         bindStarRating();
+        bindNoteForm();
     });
 })();
