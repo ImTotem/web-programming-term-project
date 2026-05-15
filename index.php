@@ -19,7 +19,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
     <header class="topbar">
         <div>
             <p class="eyebrow">Couple & Family Restaurant Map</p>
-            <h1>우리만의 맛집 지도</h1>
+            <h1>우리들의 맛집 지도</h1>
         </div>
         <nav class="nav">
             <a href="#features">기능</a>

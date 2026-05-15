@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'app_name' => '우리만의 맛집 지도',
+    'app_name' => '우리들의 맛집 지도',
     'db_host' => 'db',
     'db_user' => 'root',
     'db_pass' => 'root',
