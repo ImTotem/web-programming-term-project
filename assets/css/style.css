@@ -692,17 +692,24 @@ main {
 
 .file-upload-preview {
     margin-top: 10px;
-    overflow: hidden;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-md);
+    padding: 10px;
     background: var(--canvas-soft);
 }
 
-.file-upload-preview img {
+.file-upload-preview-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 8px;
+}
+
+.file-upload-preview-list img {
     display: block;
     width: 100%;
-    max-height: 220px;
+    aspect-ratio: 1;
     object-fit: cover;
+    border-radius: 8px;
 }
 
 textarea {
@@ -733,8 +740,10 @@ textarea:focus {
     position: relative;
     width: max-content;
     display: grid;
-    grid-template-columns: repeat(10, 20px);
-    min-height: 44px;
+    grid-template-columns: repeat(10, 24px);
+    min-height: 48px;
+    touch-action: manipulation;
+    user-select: none;
 }
 
 .star-rating::before,
@@ -762,8 +771,8 @@ textarea:focus {
 
 .star-rating button {
     grid-row: 1;
-    width: 20px;
-    min-height: 44px;
+    width: 24px;
+    min-height: 48px;
     border: 0;
     padding: 0;
     background: transparent;
@@ -776,9 +785,22 @@ textarea:focus {
     outline-offset: 3px;
 }
 
+.rating-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .rating-value {
     color: var(--body);
     font-size: 13px;
+    line-height: 1.4;
+}
+
+.rating-help {
+    color: var(--muted);
+    font-size: 12px;
     line-height: 1.4;
 }
 

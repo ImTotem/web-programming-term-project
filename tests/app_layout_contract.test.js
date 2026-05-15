@@ -72,8 +72,13 @@ assert(
 );
 
 assert(
-    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app),
-    'uploaded photos should render a preview in the modal'
+    /multiple/.test(index) && /name="photos\[\]"/.test(index) && /note-photo-preview-list/.test(index),
+    'photo upload should accept more than one image'
+);
+
+assert(
+    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app),
+    'uploaded photos should render multiple previews in the modal'
 );
 
 assert(
@@ -87,8 +92,13 @@ assert(
 );
 
 assert(
-    /setRatingValue/.test(app) && /getBoundingClientRect/.test(app),
-    'star rating should calculate half-point rating from click position'
+    /setRatingValue/.test(app) && /aria-pressed/.test(index) && !/ratingFromPointer/.test(app) && !/getBoundingClientRect/.test(app),
+    'star rating should use deterministic tap targets instead of pointer dragging'
+);
+
+assert(
+    /별을 탭해서 0\.5점 단위로 선택/.test(index) && /touch-action:\s*manipulation/.test(css),
+    'star rating should guide touch-style selection'
 );
 
 assert(

@@ -6,7 +6,7 @@
     var manualMode = false;
     var selectedPlace = null;
     var selectedIndex = null;
-    var photoPreviewUrl = null;
+    var photoPreviewUrls = [];
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
     function $(selector) {
@@ -340,7 +340,7 @@
         }
 
         input.addEventListener('change', function () {
-            showSelectedPhoto(input.files && input.files.length ? input.files[0] : null);
+            showSelectedPhotos(input.files);
         });
 
         uploadButton.addEventListener('dragover', function (event) {
@@ -361,42 +361,57 @@
             }
 
             input.files = event.dataTransfer.files;
-            showSelectedPhoto(event.dataTransfer.files[0]);
+            showSelectedPhotos(event.dataTransfer.files);
         });
     }
 
-    function showSelectedPhoto(file) {
+    function showSelectedPhotos(files) {
         var fileName = $('#note-photo-name');
+        var selectedFiles = Array.prototype.slice.call(files || []);
 
         if (!fileName) {
             return;
         }
 
-        fileName.textContent = file ? file.name : '선택된 파일 없음 · 클릭하거나 드롭해서 업로드';
-        showPhotoPreview(file);
+        if (!selectedFiles.length) {
+            fileName.textContent = '선택된 파일 없음 · 여러 장 선택하거나 드롭해서 업로드';
+        } else if (selectedFiles.length === 1) {
+            fileName.textContent = selectedFiles[0].name;
+        } else {
+            fileName.textContent = selectedFiles[0].name + ' 외 ' + (selectedFiles.length - 1) + '장';
+        }
+
+        showPhotoPreview(selectedFiles);
     }
 
-    function showPhotoPreview(file) {
+    function showPhotoPreview(files) {
         var preview = $('#note-photo-preview');
-        var image = $('#note-photo-preview-img');
+        var list = $('#note-photo-preview-list');
 
-        if (!preview || !image) {
+        if (!preview || !list) {
             return;
         }
 
-        if (photoPreviewUrl) {
-            URL.revokeObjectURL(photoPreviewUrl);
-            photoPreviewUrl = null;
-        }
+        photoPreviewUrls.forEach(function (url) {
+            URL.revokeObjectURL(url);
+        });
+        photoPreviewUrls = [];
+        list.innerHTML = '';
 
-        if (!file) {
+        if (!files.length) {
             preview.hidden = true;
-            image.removeAttribute('src');
             return;
         }
 
-        photoPreviewUrl = URL.createObjectURL(file);
-        image.src = photoPreviewUrl;
+        files.forEach(function (file) {
+            var url = URL.createObjectURL(file);
+            var image = document.createElement('img');
+            photoPreviewUrls.push(url);
+            image.src = url;
+            image.alt = file.name || '업로드한 사진';
+            list.appendChild(image);
+        });
+
         preview.hidden = false;
     }
 
@@ -411,15 +426,13 @@
 
         starRating.addEventListener('click', function (event) {
             var button = event.target.closest('[data-rating]');
-            var value = button ? Number(button.dataset.rating) : ratingFromPointer(event, starRating);
+            if (!button) {
+                return;
+            }
+
+            var value = Number(button.dataset.rating);
             setRatingValue(value, rating, ratingLabel, starRating);
         });
-    }
-
-    function ratingFromPointer(event, starRating) {
-        var rect = starRating.getBoundingClientRect();
-        var x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width);
-        return Math.min(5, Math.max(0.5, Math.ceil((x / rect.width) * 10) / 2));
     }
 
     function setRatingValue(value, rating, ratingLabel, starRating) {
@@ -430,6 +443,9 @@
         rating.value = String(value);
         ratingLabel.textContent = value.toFixed(1).replace(/\.0$/, '') + '점';
         starRating.style.setProperty('--rating-percent', (value / 5 * 100) + '%');
+        starRating.querySelectorAll('[data-rating]').forEach(function (button) {
+            button.setAttribute('aria-pressed', Number(button.dataset.rating) <= value ? 'true' : 'false');
+        });
     }
 
     function openNoteModal() {

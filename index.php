@@ -199,11 +199,11 @@ $currentUser = auth_current_user();
                         <span class="form-label">사진</span>
                         <label class="file-upload-button" for="note-photo">
                             <span>사진 선택</span>
-                            <small id="note-photo-name">선택된 파일 없음 · 클릭하거나 드롭해서 업로드</small>
+                            <small id="note-photo-name">선택된 파일 없음 · 여러 장 선택하거나 드롭해서 업로드</small>
                         </label>
-                        <input id="note-photo" class="visually-hidden" name="photo" type="file" accept="image/*">
+                        <input id="note-photo" class="visually-hidden" name="photos[]" type="file" accept="image/*" multiple>
                         <div id="note-photo-preview" class="file-upload-preview" hidden>
-                            <img id="note-photo-preview-img" alt="업로드한 사진 미리보기">
+                            <div id="note-photo-preview-list" class="file-upload-preview-list" aria-label="업로드한 사진 미리보기"></div>
                         </div>
                     </div>
 
@@ -221,18 +221,21 @@ $currentUser = auth_current_user();
                         <span class="form-label">별점</span>
                         <input id="note-rating" name="rating" type="hidden" value="">
                         <div class="star-rating" data-rating-step="0.5" aria-label="별점 선택">
-                            <button type="button" data-rating="0.5" aria-label="0.5점"></button>
-                            <button type="button" data-rating="1" aria-label="1점"></button>
-                            <button type="button" data-rating="1.5" aria-label="1.5점"></button>
-                            <button type="button" data-rating="2" aria-label="2점"></button>
-                            <button type="button" data-rating="2.5" aria-label="2.5점"></button>
-                            <button type="button" data-rating="3" aria-label="3점"></button>
-                            <button type="button" data-rating="3.5" aria-label="3.5점"></button>
-                            <button type="button" data-rating="4" aria-label="4점"></button>
-                            <button type="button" data-rating="4.5" aria-label="4.5점"></button>
-                            <button type="button" data-rating="5" aria-label="5점"></button>
+                            <button type="button" data-rating="0.5" aria-label="0.5점" aria-pressed="false"></button>
+                            <button type="button" data-rating="1" aria-label="1점" aria-pressed="false"></button>
+                            <button type="button" data-rating="1.5" aria-label="1.5점" aria-pressed="false"></button>
+                            <button type="button" data-rating="2" aria-label="2점" aria-pressed="false"></button>
+                            <button type="button" data-rating="2.5" aria-label="2.5점" aria-pressed="false"></button>
+                            <button type="button" data-rating="3" aria-label="3점" aria-pressed="false"></button>
+                            <button type="button" data-rating="3.5" aria-label="3.5점" aria-pressed="false"></button>
+                            <button type="button" data-rating="4" aria-label="4점" aria-pressed="false"></button>
+                            <button type="button" data-rating="4.5" aria-label="4.5점" aria-pressed="false"></button>
+                            <button type="button" data-rating="5" aria-label="5점" aria-pressed="false"></button>
                         </div>
-                        <span id="note-rating-label" class="rating-value">선택 안 함</span>
+                        <div class="rating-meta">
+                            <span id="note-rating-label" class="rating-value">선택 안 함</span>
+                            <span class="rating-help">별을 탭해서 0.5점 단위로 선택</span>
+                        </div>
                     </div>
 
                     <div class="modal-actions">
