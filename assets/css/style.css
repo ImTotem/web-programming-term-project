@@ -457,17 +457,20 @@ main {
 
 .map-fab-dock {
     position: absolute;
-    right: 18px;
-    bottom: 16px;
+    right: 22px;
+    bottom: 22px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
     z-index: 3;
 }
 
 .record-quick-actions {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 14px;
+    transform-origin: right center;
+    transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .record-quick-actions[hidden] {
@@ -475,23 +478,32 @@ main {
 }
 
 .record-quick-actions button {
-    min-height: 38px;
+    min-height: 58px;
     border: 1px solid rgba(220, 222, 224, 0.94);
     border-radius: 9999px;
-    padding: 0 14px;
+    padding: 0 26px;
     background: rgba(255, 255, 255, 0.96);
     color: var(--ink);
-    box-shadow: 0 12px 34px rgba(23, 23, 23, 0.16);
+    box-shadow: 0 18px 44px rgba(23, 23, 23, 0.18);
     font: inherit;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
     backdrop-filter: blur(18px);
 }
 
+.record-quick-actions button:hover {
+    background: #fff;
+    transform: translateY(-1px);
+}
+
+.map-speed-dial-action {
+    appearance: none;
+}
+
 .map-fab {
-    width: 58px;
-    height: 58px;
+    width: 86px;
+    height: 86px;
     display: grid;
     place-items: center;
     border: 0;
@@ -500,22 +512,34 @@ main {
     color: var(--on-primary);
     box-shadow: 0 16px 40px rgba(23, 23, 23, 0.26);
     font: inherit;
-    font-size: 30px;
+    font-size: 38px;
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
+    transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .map-fab:hover {
     background: var(--primary-active);
+    transform: translateY(-1px);
 }
 
+.map-fab-dock[data-mode="manual"] .map-fab,
 .map-fab-dock[data-mode="record"] .map-fab {
-    font-size: 23px;
+    width: 66px;
+    height: 66px;
+    font-size: 25px;
 }
 
 .map-fab-dock[data-mode="recorded"] .map-fab {
     background: var(--text-link);
+    letter-spacing: 3px;
+}
+
+.map-fab-dock[data-speed-dial="closed"] .record-quick-actions {
+    opacity: 0;
+    transform: translateX(10px) scale(0.96);
+    pointer-events: none;
 }
 
 .app-map {

@@ -244,13 +244,17 @@
 
         if (!activePlace) {
             dock.dataset.mode = 'manual';
+            dock.dataset.speedDial = 'closed';
             fab.setAttribute('aria-label', '지도에서 직접 추가');
+            fab.setAttribute('aria-expanded', 'false');
             symbol.textContent = '+';
             return;
         }
 
         dock.dataset.mode = hasRecord ? 'recorded' : 'record';
-        fab.setAttribute('aria-label', hasRecord ? '기록 보기' : '기록 작성');
+        dock.dataset.speedDial = hasRecord ? 'open' : 'closed';
+        fab.setAttribute('aria-label', hasRecord ? '기록 작업 메뉴' : '기록 작성');
+        fab.setAttribute('aria-expanded', hasRecord ? 'true' : 'false');
         symbol.textContent = hasRecord ? '⋯' : '✎';
     }
 
@@ -314,6 +318,11 @@
 
         if (primaryButton) {
             primaryButton.addEventListener('click', function () {
+                if (selectedPlace && (selectedPlace.has_record || selectedPlace.record_id)) {
+                    toggleSpeedDial();
+                    return;
+                }
+
                 if (selectedPlace) {
                     openNoteModal();
                     return;
@@ -338,6 +347,21 @@
                 }
             });
         }
+    }
+
+    function toggleSpeedDial() {
+        var dock = $('#map-fab-dock');
+        var fab = $('[data-action="primary-map-action"]');
+        var quickActions = $('.record-quick-actions');
+
+        if (!dock || !fab || !quickActions) {
+            return;
+        }
+
+        var isOpen = dock.dataset.speedDial !== 'open';
+        dock.dataset.speedDial = isOpen ? 'open' : 'closed';
+        quickActions.hidden = !isOpen;
+        fab.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 
     function bindNoteForm() {
