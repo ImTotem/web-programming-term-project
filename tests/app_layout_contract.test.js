@@ -95,8 +95,8 @@ assert(
 );
 
 assert(
-    /file-upload-header/.test(index + css) && /file-upload-control\s*\{[^}]*width:\s*100%/s.test(css) && /file-upload-button/.test(index) && !/file-drop-hint/.test(index) && !/min-height:\s*104px/.test(css),
-    'photo upload button should sit beside the label without a large centered drop zone'
+    /file-upload-header/.test(index + css) && /file-upload-dropzone/.test(index + css) && /file-upload-inline-button/.test(index + css) && /file-drop-hint/.test(index) && /has-photos[\s\S]*file-upload-dropzone[\s\S]*display:\s*none/.test(css),
+    'photo upload should keep the empty drop zone and hide it after images are added'
 );
 
 assert(

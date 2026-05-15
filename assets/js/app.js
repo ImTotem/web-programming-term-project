@@ -445,11 +445,12 @@
 
     function bindFileUpload() {
         var input = $('#note-photo');
-        var uploadButton = $('.file-upload-button');
+        var uploadControl = $('.file-upload-control');
+        var uploadDropzone = $('.file-upload-dropzone');
         var uploadPreview = $('#note-photo-preview');
         var previewList = $('#note-photo-preview-list');
 
-        if (!input || !uploadButton || !uploadPreview || !previewList) {
+        if (!input || !uploadControl || !uploadDropzone || !uploadPreview || !previewList) {
             return;
         }
 
@@ -459,27 +460,26 @@
             appendSelectedPhotos(input.files, input);
         });
 
-        uploadButton.addEventListener('dragover', function (event) {
-            event.preventDefault();
-            uploadPreview.hidden = false;
-            uploadPreview.classList.add('is-dragging');
-        });
+        [uploadDropzone, uploadPreview].forEach(function (dropTarget) {
+            dropTarget.addEventListener('dragover', function (event) {
+                event.preventDefault();
+                dropTarget.classList.add('is-dragging');
+            });
 
-        uploadButton.addEventListener('dragleave', function () {
-            uploadPreview.classList.remove('is-dragging');
-            uploadPreview.hidden = !selectedPhotoFiles.length;
-        });
+            dropTarget.addEventListener('dragleave', function () {
+                dropTarget.classList.remove('is-dragging');
+            });
 
-        uploadButton.addEventListener('drop', function (event) {
-            event.preventDefault();
-            uploadPreview.classList.remove('is-dragging');
+            dropTarget.addEventListener('drop', function (event) {
+                event.preventDefault();
+                dropTarget.classList.remove('is-dragging');
 
-            if (!event.dataTransfer || !event.dataTransfer.files.length) {
-                uploadPreview.hidden = !selectedPhotoFiles.length;
-                return;
-            }
+                if (!event.dataTransfer || !event.dataTransfer.files.length) {
+                    return;
+                }
 
-            appendSelectedPhotos(event.dataTransfer.files, input);
+                appendSelectedPhotos(event.dataTransfer.files, input);
+            });
         });
     }
 
@@ -508,11 +508,16 @@
     }
 
     function showPhotoPreview(files) {
+        var uploadControl = $('.file-upload-control');
         var preview = $('#note-photo-preview');
         var list = $('#note-photo-preview-list');
 
         if (!preview || !list) {
             return;
+        }
+
+        if (uploadControl) {
+            uploadControl.classList.toggle('has-photos', files.length > 0);
         }
 
         photoPreviewUrls.forEach(function (url) {
@@ -522,6 +527,7 @@
         list.innerHTML = '';
 
         if (!files.length) {
+            preview.classList.remove('is-dragging');
             preview.hidden = true;
             return;
         }
