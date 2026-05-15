@@ -20,12 +20,21 @@
             return;
         }
 
+        mapEl.innerHTML = '';
         map = new kakao.maps.Map(mapEl, {
             center: new kakao.maps.LatLng(defaultCenter.lat, defaultCenter.lng),
             level: 5
         });
         mapEl.classList.add('is-ready');
-        mapEl.innerHTML = '';
+
+        kakao.maps.event.addListener(map, 'tilesloaded', function () {
+            mapEl.classList.add('has-tiles');
+        });
+
+        setTimeout(function () {
+            map.relayout();
+            map.setCenter(new kakao.maps.LatLng(defaultCenter.lat, defaultCenter.lng));
+        }, 0);
     }
 
     function renderResults(places) {
@@ -110,4 +119,3 @@
         bindSearch();
     });
 })();
-
