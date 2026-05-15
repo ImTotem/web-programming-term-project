@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/auth.php';
 
 $error = '';
+$notice = '';
 $email = '';
 $nickname = '';
 
@@ -17,12 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $registered = auth_register_user($email, $password, $nickname);
 
         if ($registered['ok']) {
-            auth_login_user($registered['user']);
-            header('Location: index.php');
-            exit;
-        }
+            $mail = auth_send_verification_email($registered['user']);
 
-        $error = $registered['error'];
+            if ($mail['ok']) {
+                header('Location: login.php?registered=1');
+                exit;
+            }
+
+            $notice = '계정은 생성되었지만 인증 메일 발송에 실패했습니다. Resend API 설정을 확인한 뒤 다시 시도하세요.';
+            $error = $mail['error'];
+        } else {
+            $error = $registered['error'];
+        }
     }
 }
 ?>
@@ -40,6 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a class="back-link" href="index.php">우리들의 맛집 지도</a>
             <h1>회원가입</h1>
             <p>우리 그룹의 맛집 기록과 취향 평가를 시작합니다.</p>
+
+            <?php if ($notice): ?>
+                <div class="form-notice"><?= tastemap_h($notice) ?></div>
+            <?php endif; ?>
 
             <?php if ($error): ?>
                 <div class="form-alert"><?= tastemap_h($error) ?></div>
@@ -66,4 +77,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
 </body>
 </html>
-

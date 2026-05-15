@@ -14,9 +14,12 @@
 1. `config.example.php`를 복사해 `config.php`를 만듭니다.
 2. 카카오 개발자 콘솔에서 REST API 키와 JavaScript 키를 발급받아 입력합니다.
 3. 카카오 개발자 콘솔의 플랫폼 설정에서 Web 사이트 도메인에 `http://localhost:8080`을 등록합니다.
-4. phpMyAdmin에서 `db/schema.sql`을 `mydb` 데이터베이스에 실행합니다.
+4. Resend에서 메일 API 키를 발급받고 `resend_api_key`, `mail_from`, `app_base_url`을 입력합니다.
+5. phpMyAdmin에서 `db/schema.sql`을 `mydb` 데이터베이스에 실행합니다.
 
 지도 스크립트에서 401이 발생하면 JavaScript 키가 잘못되었거나 Web 플랫폼 도메인이 등록되지 않은 경우가 많습니다. 장소 검색 API에서 401이 발생하면 REST API 키를 확인해야 합니다.
+
+Resend 테스트 발신자 `onboarding@resend.dev`는 계정 소유자 이메일 등 제한된 수신자에게만 보낼 수 있습니다. 다른 사용자 이메일로 인증 메일을 보내려면 Resend에서 도메인을 인증하고 `mail_from`을 해당 도메인 주소로 바꾸세요.
 
 ## 현재 포함된 것
 

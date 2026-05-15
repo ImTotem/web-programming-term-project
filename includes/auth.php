@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/mailer.php';
 
 function auth_current_user()
 {
@@ -9,7 +10,7 @@ function auth_current_user()
     }
 
     $conn = tastemap_db();
-    $stmt = $conn->prepare('SELECT id, email, nickname, created_at FROM users WHERE id = ?');
+    $stmt = $conn->prepare('SELECT id, email, nickname, email_verified_at, created_at FROM users WHERE id = ?');
     $stmt->bind_param('i', $_SESSION['user_id']);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -35,7 +36,7 @@ function auth_require_login()
 function auth_find_user_by_email($email)
 {
     $conn = tastemap_db();
-    $stmt = $conn->prepare('SELECT id, email, password_hash, nickname, created_at FROM users WHERE email = ?');
+    $stmt = $conn->prepare('SELECT id, email, password_hash, nickname, email_verified_at, created_at FROM users WHERE email = ?');
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -86,6 +87,7 @@ function auth_register_user($email, $password, $nickname)
             'id' => $userId,
             'email' => $email,
             'nickname' => $nickname,
+            'email_verified_at' => null,
         ],
     ];
 }
@@ -98,10 +100,20 @@ function auth_attempt_login($email, $password)
         return null;
     }
 
+    if (empty($user['email_verified_at'])) {
+        return [
+            'error' => 'email_not_verified',
+            'id' => $user['id'],
+            'email' => $user['email'],
+            'nickname' => $user['nickname'],
+        ];
+    }
+
     return [
         'id' => $user['id'],
         'email' => $user['email'],
         'nickname' => $user['nickname'],
+        'email_verified_at' => $user['email_verified_at'],
         'created_at' => $user['created_at'],
     ];
 }
@@ -122,4 +134,91 @@ function auth_logout_user()
     }
 
     session_destroy();
+}
+
+function auth_create_email_verification_token($userId)
+{
+    $token = bin2hex(random_bytes(32));
+    $tokenHash = hash('sha256', $token);
+    $conn = tastemap_db();
+
+    $stmt = $conn->prepare('DELETE FROM email_verification_tokens WHERE user_id = ? AND consumed_at IS NULL');
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $conn->prepare('INSERT INTO email_verification_tokens (user_id, token_hash, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 24 HOUR))');
+    $stmt->bind_param('is', $userId, $tokenHash);
+    $stmt->execute();
+    $stmt->close();
+
+    return $token;
+}
+
+function auth_verification_url($token)
+{
+    $config = tastemap_config();
+    $baseUrl = isset($config['app_base_url']) ? rtrim($config['app_base_url'], '/') : '';
+
+    if (!$baseUrl && !empty($_SERVER['HTTP_HOST'])) {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $basePath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        $baseUrl = $scheme . '://' . $_SERVER['HTTP_HOST'] . $basePath;
+    }
+
+    return $baseUrl . '/verify_email.php?token=' . urlencode($token);
+}
+
+function auth_send_verification_email($user)
+{
+    $token = auth_create_email_verification_token((int) $user['id']);
+    $url = auth_verification_url($token);
+    $html = mailer_verification_html($user['nickname'], $url);
+
+    return mailer_send_resend($user['email'], '우리들의 맛집 지도 이메일 인증', $html);
+}
+
+function auth_verify_email_token($token)
+{
+    if (!$token) {
+        return ['ok' => false, 'error' => '인증 토큰이 없습니다.'];
+    }
+
+    $tokenHash = hash('sha256', $token);
+    $conn = tastemap_db();
+
+    $stmt = $conn->prepare(
+        'SELECT id, user_id FROM email_verification_tokens
+         WHERE token_hash = ? AND consumed_at IS NULL AND expires_at >= NOW()'
+    );
+    $stmt->bind_param('s', $tokenHash);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    if (!$row) {
+        return ['ok' => false, 'error' => '유효하지 않거나 만료된 인증 링크입니다.'];
+    }
+
+    $conn->begin_transaction();
+
+    try {
+        $stmt = $conn->prepare('UPDATE users SET email_verified_at = NOW() WHERE id = ?');
+        $stmt->bind_param('i', $row['user_id']);
+        $stmt->execute();
+        $stmt->close();
+
+        $stmt = $conn->prepare('UPDATE email_verification_tokens SET consumed_at = NOW() WHERE id = ?');
+        $stmt->bind_param('i', $row['id']);
+        $stmt->execute();
+        $stmt->close();
+
+        $conn->commit();
+    } catch (Throwable $e) {
+        $conn->rollback();
+        return ['ok' => false, 'error' => '이메일 인증 처리 중 오류가 발생했습니다.'];
+    }
+
+    return ['ok' => true, 'user_id' => (int) $row['user_id']];
 }
