@@ -633,6 +633,16 @@ main {
     margin-top: 20px;
 }
 
+.note-form input:not([type="hidden"]):not([type="file"]),
+.note-form textarea,
+.file-upload-button,
+.file-upload-preview,
+.rating-input-area {
+    width: min(100%, 480px);
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .form-label {
     display: block;
     margin-bottom: 7px;
@@ -654,11 +664,10 @@ main {
 }
 
 .file-upload-button {
-    min-height: 88px;
+    min-height: 104px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: center;
     border: 1px dashed var(--hairline-strong);
     border-radius: var(--radius-md);
     padding: 18px;
@@ -681,15 +690,6 @@ main {
     line-height: 1;
 }
 
-.file-upload-button small {
-    min-width: 0;
-    color: var(--body);
-    font-size: 13px;
-    line-height: 1.4;
-    overflow-wrap: anywhere;
-    text-align: right;
-}
-
 .file-upload-preview {
     margin-top: 10px;
     border: 1px solid var(--hairline);
@@ -700,8 +700,8 @@ main {
 
 .file-upload-preview-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
 }
 
 .file-upload-preview-list img {
@@ -738,12 +738,13 @@ textarea:focus {
 .star-rating {
     --rating-percent: 0%;
     position: relative;
-    width: max-content;
+    width: 200px;
     display: grid;
-    grid-template-columns: repeat(10, 24px);
+    grid-template-columns: repeat(10, 20px);
     min-height: 48px;
     touch-action: manipulation;
     user-select: none;
+    justify-self: center;
 }
 
 .star-rating::before,
@@ -771,13 +772,53 @@ textarea:focus {
 
 .star-rating button {
     grid-row: 1;
-    width: 24px;
+    width: 20px;
     min-height: 48px;
     border: 0;
     padding: 0;
     background: transparent;
     cursor: pointer;
     z-index: 1;
+}
+
+.star-rating button:nth-of-type(1) {
+    grid-column: 1;
+}
+
+.star-rating button:nth-of-type(2) {
+    grid-column: 2;
+}
+
+.star-rating button:nth-of-type(3) {
+    grid-column: 3;
+}
+
+.star-rating button:nth-of-type(4) {
+    grid-column: 4;
+}
+
+.star-rating button:nth-of-type(5) {
+    grid-column: 5;
+}
+
+.star-rating button:nth-of-type(6) {
+    grid-column: 6;
+}
+
+.star-rating button:nth-of-type(7) {
+    grid-column: 7;
+}
+
+.star-rating button:nth-of-type(8) {
+    grid-column: 8;
+}
+
+.star-rating button:nth-of-type(9) {
+    grid-column: 9;
+}
+
+.star-rating button:nth-of-type(10) {
+    grid-column: 10;
 }
 
 .star-rating button:focus-visible {
@@ -788,6 +829,7 @@ textarea:focus {
 .rating-meta {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
 }

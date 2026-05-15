@@ -332,10 +332,9 @@
 
     function bindFileUpload() {
         var input = $('#note-photo');
-        var fileName = $('#note-photo-name');
         var uploadButton = $('.file-upload-button');
 
-        if (!input || !fileName || !uploadButton) {
+        if (!input || !uploadButton) {
             return;
         }
 
@@ -366,20 +365,7 @@
     }
 
     function showSelectedPhotos(files) {
-        var fileName = $('#note-photo-name');
         var selectedFiles = Array.prototype.slice.call(files || []);
-
-        if (!fileName) {
-            return;
-        }
-
-        if (!selectedFiles.length) {
-            fileName.textContent = '선택된 파일 없음 · 여러 장 선택하거나 드롭해서 업로드';
-        } else if (selectedFiles.length === 1) {
-            fileName.textContent = selectedFiles[0].name;
-        } else {
-            fileName.textContent = selectedFiles[0].name + ' 외 ' + (selectedFiles.length - 1) + '장';
-        }
 
         showPhotoPreview(selectedFiles);
     }

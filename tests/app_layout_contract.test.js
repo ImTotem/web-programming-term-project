@@ -77,12 +77,12 @@ assert(
 );
 
 assert(
-    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app),
+    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app) && /minmax\(180px,\s*1fr\)/.test(css),
     'uploaded photos should render multiple previews in the modal'
 );
 
 assert(
-    /드롭해서 업로드/.test(index) && /drop/.test(app),
+    /드롭해서 업로드/.test(index) && /drop/.test(app) && !/note-photo-name/.test(index + app),
     'photo upload control should guide and support dropping files'
 );
 
@@ -92,13 +92,18 @@ assert(
 );
 
 assert(
-    /setRatingValue/.test(app) && /aria-pressed/.test(index) && !/ratingFromPointer/.test(app) && !/getBoundingClientRect/.test(app),
-    'star rating should use deterministic tap targets instead of pointer dragging'
+    /setRatingValue/.test(app) && /aria-pressed/.test(index) && !/ratingFromPointer/.test(app) && !/getBoundingClientRect/.test(app) && /grid-template-columns:\s*repeat\(10,\s*20px\)/.test(css) && /button:nth-of-type\(10\)/.test(css),
+    'star rating should use deterministic tap targets aligned to the visible stars'
 );
 
 assert(
-    /별을 탭해서 0\.5점 단위로 선택/.test(index) && /touch-action:\s*manipulation/.test(css),
+    /별을 탭해서 0\.5점 단위로 선택/.test(index) && /touch-action:\s*manipulation/.test(css) && /rating-input-area/.test(index + css),
     'star rating should guide touch-style selection'
+);
+
+assert(
+    /width:\s*min\(100%,\s*480px\)/.test(css),
+    'modal input controls should be centered without centering section titles and labels'
 );
 
 assert(

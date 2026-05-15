@@ -197,9 +197,8 @@ $currentUser = auth_current_user();
                 <form class="note-form">
                     <div class="file-upload-control">
                         <span class="form-label">사진</span>
-                        <label class="file-upload-button" for="note-photo">
+                        <label class="file-upload-button" for="note-photo" aria-label="사진 선택, 여러 장 선택하거나 드롭해서 업로드">
                             <span>사진 선택</span>
-                            <small id="note-photo-name">선택된 파일 없음 · 여러 장 선택하거나 드롭해서 업로드</small>
                         </label>
                         <input id="note-photo" class="visually-hidden" name="photos[]" type="file" accept="image/*" multiple>
                         <div id="note-photo-preview" class="file-upload-preview" hidden>
@@ -220,21 +219,23 @@ $currentUser = auth_current_user();
                     <div class="rating-field">
                         <span class="form-label">별점</span>
                         <input id="note-rating" name="rating" type="hidden" value="">
-                        <div class="star-rating" data-rating-step="0.5" aria-label="별점 선택">
-                            <button type="button" data-rating="0.5" aria-label="0.5점" aria-pressed="false"></button>
-                            <button type="button" data-rating="1" aria-label="1점" aria-pressed="false"></button>
-                            <button type="button" data-rating="1.5" aria-label="1.5점" aria-pressed="false"></button>
-                            <button type="button" data-rating="2" aria-label="2점" aria-pressed="false"></button>
-                            <button type="button" data-rating="2.5" aria-label="2.5점" aria-pressed="false"></button>
-                            <button type="button" data-rating="3" aria-label="3점" aria-pressed="false"></button>
-                            <button type="button" data-rating="3.5" aria-label="3.5점" aria-pressed="false"></button>
-                            <button type="button" data-rating="4" aria-label="4점" aria-pressed="false"></button>
-                            <button type="button" data-rating="4.5" aria-label="4.5점" aria-pressed="false"></button>
-                            <button type="button" data-rating="5" aria-label="5점" aria-pressed="false"></button>
-                        </div>
-                        <div class="rating-meta">
-                            <span id="note-rating-label" class="rating-value">선택 안 함</span>
-                            <span class="rating-help">별을 탭해서 0.5점 단위로 선택</span>
+                        <div class="rating-input-area">
+                            <div class="star-rating" data-rating-step="0.5" aria-label="별점 선택">
+                                <button type="button" data-rating="0.5" aria-label="0.5점" aria-pressed="false"></button>
+                                <button type="button" data-rating="1" aria-label="1점" aria-pressed="false"></button>
+                                <button type="button" data-rating="1.5" aria-label="1.5점" aria-pressed="false"></button>
+                                <button type="button" data-rating="2" aria-label="2점" aria-pressed="false"></button>
+                                <button type="button" data-rating="2.5" aria-label="2.5점" aria-pressed="false"></button>
+                                <button type="button" data-rating="3" aria-label="3점" aria-pressed="false"></button>
+                                <button type="button" data-rating="3.5" aria-label="3.5점" aria-pressed="false"></button>
+                                <button type="button" data-rating="4" aria-label="4점" aria-pressed="false"></button>
+                                <button type="button" data-rating="4.5" aria-label="4.5점" aria-pressed="false"></button>
+                                <button type="button" data-rating="5" aria-label="5점" aria-pressed="false"></button>
+                            </div>
+                            <div class="rating-meta">
+                                <span id="note-rating-label" class="rating-value">선택 안 함</span>
+                                <span class="rating-help">별을 탭해서 0.5점 단위로 선택</span>
+                            </div>
                         </div>
                     </div>
 
