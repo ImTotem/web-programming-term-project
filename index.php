@@ -25,8 +25,6 @@ $currentUser = auth_current_user();
         <nav class="nav">
             <?php if ($currentUser): ?>
                 <a href="#map-panel">지도</a>
-                <a href="#saved-panel">저장 목록</a>
-                <a href="#stats-panel">통계</a>
                 <span><?= tastemap_h($currentUser['nickname']) ?>님</span>
                 <a href="logout.php">로그아웃</a>
             <?php else: ?>
@@ -153,6 +151,7 @@ $currentUser = auth_current_user();
                     <div>
                         <label for="category">카테고리</label>
                         <select id="category" name="category">
+                            <option value="">전체</option>
                             <option value="FD6">음식점</option>
                             <option value="CE7">카페</option>
                         </select>
@@ -160,25 +159,11 @@ $currentUser = auth_current_user();
                     <button type="submit">검색</button>
                 </form>
 
-                <section class="side-section">
+                <section class="side-section results-section">
                     <h3>검색 결과</h3>
                     <ul id="place-results">
-                        <li class="empty">검색어를 입력하면 음식점/카페 후보가 표시됩니다.</li>
+                        <li class="empty">검색어를 입력하면 장소 후보가 표시됩니다.</li>
                     </ul>
-                </section>
-
-                <section id="saved-panel" class="side-section">
-                    <h3>저장 후보</h3>
-                    <div class="empty">아직 저장된 장소가 없습니다. 검색 결과에서 장소를 저장하는 기능이 다음 단계에 추가됩니다.</div>
-                </section>
-
-                <section id="stats-panel" class="side-section">
-                    <h3>우리 그룹 요약</h3>
-                    <div class="summary-grid">
-                        <span><strong>0</strong> 저장</span>
-                        <span><strong>0</strong> 방문</span>
-                        <span><strong>-</strong> 추천</span>
-                    </div>
                 </section>
             </aside>
         </section>

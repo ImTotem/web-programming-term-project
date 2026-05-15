@@ -1,6 +1,7 @@
 (function () {
     var map = null;
     var markers = [];
+    var infoWindow = null;
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
     function $(selector) {
@@ -25,6 +26,7 @@
             center: new kakao.maps.LatLng(defaultCenter.lat, defaultCenter.lng),
             level: 5
         });
+        infoWindow = new kakao.maps.InfoWindow({ zIndex: 10 });
         mapEl.classList.add('is-ready');
 
         kakao.maps.event.addListener(map, 'tilesloaded', function () {
@@ -51,11 +53,16 @@
         places.forEach(function (place, index) {
             var item = document.createElement('li');
             item.className = 'place-item';
+            item.tabIndex = 0;
+            item.setAttribute('role', 'button');
             item.innerHTML =
                 '<strong>' + escapeHtml(place.place_name) + '</strong>' +
                 '<span>' + escapeHtml(place.road_address_name || place.address_name || '') + '</span>' +
                 '<small>' + escapeHtml(place.category_name || '') + '</small>' +
-                '<a href="' + escapeHtml(place.place_url) + '" target="_blank" rel="noreferrer">카카오맵에서 보기</a>';
+                '<div class="place-actions">' +
+                    '<a href="' + escapeHtml(place.place_url) + '" target="_blank" rel="noreferrer" data-skip-focus="true">카카오맵에서 보기</a>' +
+                    '<button type="button" data-action="save-place" data-skip-focus="true">저장</button>' +
+                '</div>';
             list.appendChild(item);
 
             if (map && place.y && place.x) {
@@ -66,11 +73,73 @@
                 });
                 markers.push(marker);
 
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    focusPlace(index, place);
+                });
+
                 if (index === 0) {
                     map.setCenter(position);
                 }
             }
+
+            item.addEventListener('click', function (event) {
+                if (event.target.closest('[data-skip-focus="true"]')) {
+                    return;
+                }
+                focusPlace(index, place);
+            });
+
+            item.addEventListener('keydown', function (event) {
+                if (event.key !== 'Enter' && event.key !== ' ') {
+                    return;
+                }
+                event.preventDefault();
+                focusPlace(index, place);
+            });
+
+            var saveButton = item.querySelector('[data-action="save-place"]');
+            saveButton.addEventListener('click', function () {
+                focusPlace(index, place);
+            });
         });
+    }
+
+    function focusPlace(index, place) {
+        var list = $('#place-results');
+        var items = list ? list.querySelectorAll('.place-item') : [];
+        items.forEach(function (item) {
+            item.classList.remove('is-active');
+        });
+
+        if (items[index]) {
+            items[index].classList.add('is-active');
+        }
+
+        markers.forEach(function (marker, markerIndex) {
+            if (typeof marker.setZIndex === 'function') {
+                marker.setZIndex(markerIndex === index ? 20 : 1);
+            }
+        });
+
+        if (!map || !place.y || !place.x) {
+            return;
+        }
+
+        var position = new kakao.maps.LatLng(place.y, place.x);
+        map.setCenter(position);
+        if (typeof map.setLevel === 'function') {
+            map.setLevel(4);
+        }
+
+        if (infoWindow && markers[index]) {
+            infoWindow.setContent(
+                '<div class="map-info-window">' +
+                    '<strong>' + escapeHtml(place.place_name) + '</strong>' +
+                    '<span>' + escapeHtml(place.road_address_name || place.address_name || '') + '</span>' +
+                '</div>'
+            );
+            infoWindow.open(map, markers[index]);
+        }
     }
 
     function escapeHtml(value) {

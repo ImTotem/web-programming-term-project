@@ -425,9 +425,9 @@ main {
 .app-side-panel {
     min-height: 0;
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto minmax(0, 1fr);
     gap: 14px;
-    overflow-y: auto;
+    overflow: hidden;
     padding-right: 4px;
 }
 
@@ -449,7 +449,7 @@ main {
 }
 
 .app-search-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 132px;
     position: sticky;
     top: 0;
     z-index: 2;
@@ -459,6 +459,10 @@ main {
     padding: 16px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(18px);
+}
+
+.app-search-panel button {
+    grid-column: 1 / -1;
 }
 
 label {
@@ -533,6 +537,13 @@ select:focus {
     background: var(--surface-card);
 }
 
+.results-section {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+}
+
 .side-section h3 {
     margin: 0 0 12px;
     color: var(--ink);
@@ -550,7 +561,19 @@ select:focus {
 }
 
 .app-side-panel #place-results {
-    max-height: none;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 4px;
+    align-content: start;
+}
+
+.app-side-panel #place-results::-webkit-scrollbar {
+    width: 8px;
+}
+
+.app-side-panel #place-results::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: var(--hairline-strong);
 }
 
 .place-item,
@@ -559,6 +582,17 @@ select:focus {
     border-radius: var(--radius-md);
     padding: 12px;
     background: var(--canvas-soft);
+}
+
+.place-item {
+    cursor: pointer;
+    transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.place-item:hover,
+.place-item.is-active {
+    border-color: var(--ink);
+    background: var(--surface-card);
 }
 
 .place-item strong,
@@ -610,6 +644,54 @@ select:focus {
     font-size: 13px;
     font-weight: 500;
     text-decoration: none;
+}
+
+.place-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.place-actions a,
+.place-actions button {
+    min-height: 34px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    background: var(--surface-card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.place-actions button {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--on-primary);
+}
+
+.map-info-window {
+    min-width: 160px;
+    padding: 8px 10px;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.map-info-window strong,
+.map-info-window span {
+    display: block;
+}
+
+.map-info-window span {
+    margin-top: 2px;
+    color: var(--body);
+    font-size: 12px;
 }
 
 .feature-grid {
@@ -827,8 +909,17 @@ select:focus {
         padding-right: 0;
     }
 
+    .results-section,
+    .app-side-panel #place-results {
+        overflow: visible;
+    }
+
     .search-panel {
         grid-template-columns: 1fr;
+    }
+
+    .app-search-panel button {
+        grid-column: auto;
     }
 
     .results-panel {
