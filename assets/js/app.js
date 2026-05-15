@@ -329,6 +329,42 @@
         }
     }
 
+    function bindFileUpload() {
+        var input = $('#note-photo');
+        var fileName = $('#note-photo-name');
+
+        if (!input || !fileName) {
+            return;
+        }
+
+        input.addEventListener('change', function () {
+            var file = input.files && input.files.length ? input.files[0] : null;
+            fileName.textContent = file ? file.name : '선택된 파일 없음';
+        });
+    }
+
+    function bindStarRating() {
+        var rating = $('#note-rating');
+        var ratingLabel = $('#note-rating-label');
+        var starRating = $('.star-rating');
+
+        if (!rating || !ratingLabel || !starRating) {
+            return;
+        }
+
+        starRating.addEventListener('click', function (event) {
+            var button = event.target.closest('[data-rating]');
+            if (!button) {
+                return;
+            }
+
+            var value = Number(button.dataset.rating);
+            rating.value = String(value);
+            ratingLabel.textContent = value.toFixed(1).replace(/\.0$/, '') + '점';
+            starRating.style.setProperty('--rating-percent', (value / 5 * 100) + '%');
+        });
+    }
+
     function openNoteModal() {
         var modal = $('#place-note-modal');
         if (!modal) {
@@ -342,5 +378,7 @@
         initMap();
         bindSearch();
         bindMapActions();
+        bindFileUpload();
+        bindStarRating();
     });
 })();

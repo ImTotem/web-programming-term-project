@@ -57,6 +57,26 @@ assert(
 );
 
 assert(
+    index.indexOf('id="note-photo"') < index.indexOf('id="note-menu"'),
+    'photo upload should appear before menu and note fields'
+);
+
+assert(
+    /file-upload-control/.test(index) && /file-upload-button/.test(css) && /bindFileUpload/.test(app),
+    'file input should use a custom designed upload control'
+);
+
+assert(
+    /star-rating/.test(index) && /data-rating-step="0.5"/.test(index) && /bindStarRating/.test(app),
+    'rating should use stars with half-point increments'
+);
+
+assert(
+    !/<select id="note-rating"/.test(index),
+    'rating should not use a native dropdown'
+);
+
+assert(
     !/Kakao Local API는 카테고리 목록 조회 API를 제공하지 않습니다/.test(index),
     'category source limitation copy should not be shown in the app screen'
 );

@@ -629,8 +629,60 @@ main {
 
 .note-form {
     display: grid;
-    gap: 10px;
+    gap: 16px;
     margin-top: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    min-height: 0 !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    border: 0 !important;
+}
+
+.file-upload-button {
+    min-height: 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px dashed var(--hairline-strong);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    background: var(--canvas-soft);
+    cursor: pointer;
+}
+
+.file-upload-button span {
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.file-upload-button small {
+    min-width: 0;
+    color: var(--body);
+    font-size: 13px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    text-align: right;
 }
 
 textarea {
@@ -649,6 +701,65 @@ textarea {
 textarea:focus {
     outline: 2px solid rgba(13, 116, 206, 0.24);
     border-color: var(--text-link);
+}
+
+.rating-field {
+    display: grid;
+    gap: 8px;
+}
+
+.star-rating {
+    --rating-percent: 0%;
+    position: relative;
+    width: max-content;
+    display: grid;
+    grid-template-columns: repeat(10, 16px);
+    min-height: 36px;
+}
+
+.star-rating::before,
+.star-rating::after {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    align-self: center;
+    pointer-events: none;
+    font-size: 32px;
+    line-height: 1;
+    letter-spacing: 0;
+    content: "★★★★★";
+}
+
+.star-rating::before {
+    color: var(--hairline-strong);
+}
+
+.star-rating::after {
+    width: var(--rating-percent);
+    overflow: hidden;
+    color: #171717;
+    white-space: nowrap;
+}
+
+.star-rating button {
+    grid-row: 1;
+    width: 16px;
+    min-height: 36px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.star-rating button:focus-visible {
+    outline: 2px solid rgba(13, 116, 206, 0.32);
+    outline-offset: 3px;
+}
+
+.rating-value {
+    color: var(--body);
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 .modal-actions {

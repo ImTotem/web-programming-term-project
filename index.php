@@ -195,24 +195,42 @@ $currentUser = auth_current_user();
                     <button type="button" class="icon-button" data-action="close-note-modal" aria-label="닫기">×</button>
                 </div>
                 <form class="note-form">
-                    <label for="note-menu">대표 메뉴</label>
-                    <input id="note-menu" name="menu" type="text" placeholder="예: 쇼유라멘, 트러플 감자튀김">
+                    <div class="file-upload-control">
+                        <span class="form-label">메뉴 사진</span>
+                        <label class="file-upload-button" for="note-photo">
+                            <span>사진 선택</span>
+                            <small id="note-photo-name">선택된 파일 없음</small>
+                        </label>
+                        <input id="note-photo" class="visually-hidden" name="photo" type="file" accept="image/*">
+                    </div>
 
-                    <label for="note-text">미식 기록</label>
-                    <textarea id="note-text" name="note" rows="5" placeholder="맛의 인상, 식감, 향, 같이 먹은 메뉴 조합을 남겨보세요."></textarea>
+                    <div>
+                        <label for="note-menu">대표 메뉴</label>
+                        <input id="note-menu" name="menu" type="text" placeholder="예: 쇼유라멘, 트러플 감자튀김">
+                    </div>
 
-                    <label for="note-photo">메뉴 사진</label>
-                    <input id="note-photo" name="photo" type="file" accept="image/*">
+                    <div>
+                        <label for="note-text">미식 기록</label>
+                        <textarea id="note-text" name="note" rows="5" placeholder="맛의 인상, 식감, 향, 같이 먹은 메뉴 조합을 남겨보세요."></textarea>
+                    </div>
 
-                    <label for="note-rating">별점</label>
-                    <select id="note-rating" name="rating">
-                        <option value="">선택 안 함</option>
-                        <option value="5">5점</option>
-                        <option value="4">4점</option>
-                        <option value="3">3점</option>
-                        <option value="2">2점</option>
-                        <option value="1">1점</option>
-                    </select>
+                    <div class="rating-field">
+                        <span class="form-label">별점</span>
+                        <input id="note-rating" name="rating" type="hidden" value="">
+                        <div class="star-rating" data-rating-step="0.5" aria-label="별점 선택">
+                            <button type="button" data-rating="0.5" aria-label="0.5점"></button>
+                            <button type="button" data-rating="1" aria-label="1점"></button>
+                            <button type="button" data-rating="1.5" aria-label="1.5점"></button>
+                            <button type="button" data-rating="2" aria-label="2점"></button>
+                            <button type="button" data-rating="2.5" aria-label="2.5점"></button>
+                            <button type="button" data-rating="3" aria-label="3점"></button>
+                            <button type="button" data-rating="3.5" aria-label="3.5점"></button>
+                            <button type="button" data-rating="4" aria-label="4점"></button>
+                            <button type="button" data-rating="4.5" aria-label="4.5점"></button>
+                            <button type="button" data-rating="5" aria-label="5점"></button>
+                        </div>
+                        <span id="note-rating-label" class="rating-value">선택 안 함</span>
+                    </div>
 
                     <div class="modal-actions">
                         <button type="button" class="button secondary" data-action="close-note-modal">취소</button>
