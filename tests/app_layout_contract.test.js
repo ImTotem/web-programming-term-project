@@ -77,12 +77,12 @@ assert(
 );
 
 assert(
-    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app) && /minmax\(180px,\s*1fr\)/.test(css),
-    'uploaded photos should render multiple previews in the modal'
+    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app) && /photoPreviewUrls/.test(app) && /minmax\(88px,\s*104px\)/.test(css),
+    'uploaded photos should render multiple resized previews in the modal'
 );
 
 assert(
-    /드롭해서 업로드/.test(index) && /drop/.test(app) && !/note-photo-name/.test(index + app),
+    /드롭해서도 업로드/.test(index) && /file-drop-hint/.test(index + css) && /is-dragging/.test(app + css) && !/note-photo-name/.test(index + app),
     'photo upload control should guide and support dropping files'
 );
 

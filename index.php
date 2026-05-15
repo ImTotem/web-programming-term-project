@@ -199,6 +199,7 @@ $currentUser = auth_current_user();
                         <span class="form-label">사진</span>
                         <label class="file-upload-button" for="note-photo" aria-label="사진 선택, 여러 장 선택하거나 드롭해서 업로드">
                             <span>사진 선택</span>
+                            <small class="file-drop-hint">여기에 드롭해서도 업로드할 수 있어요.</small>
                         </label>
                         <input id="note-photo" class="visually-hidden" name="photos[]" type="file" accept="image/*" multiple>
                         <div id="note-photo-preview" class="file-upload-preview" hidden>
