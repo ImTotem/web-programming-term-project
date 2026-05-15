@@ -18,7 +18,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
 <body>
     <header class="topbar">
         <div>
-            <p class="eyebrow">Couple & Family Restaurant Map</p>
+            <p class="eyebrow">Custom Group Restaurant Map</p>
             <h1>우리들의 맛집 지도</h1>
         </div>
         <nav class="nav">
@@ -32,9 +32,9 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
         <section class="hero">
             <div class="hero-copy">
                 <p class="eyebrow">카카오맵 기반 PHP/MySQL 텀프로젝트</p>
-                <h2>우리 가족, 우리 커플에게 맞는 맛집을 함께 고르는 지도</h2>
+                <h2>우리에게 맞는 맛집을 함께 고르는 지도</h2>
                 <p>
-                    음식점과 카페를 검색하고, 그룹별 방문 기록과 취향 평가를 쌓아
+                    음식점과 카페를 검색하고, 우리 그룹의 방문 기록과 취향 평가를 쌓아
                     다음 외식 장소를 추천하는 TasteMap 프로젝트 시작 화면입니다.
                 </p>
                 <div class="hero-actions">
@@ -88,7 +88,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
         <section id="features" class="feature-grid">
             <article>
                 <h3>그룹 맛집 지도</h3>
-                <p>커플, 가족, 친구 모임별로 같은 장소도 다른 상태와 평가를 저장합니다.</p>
+                <p>사용자가 만든 그룹 단위로 같은 장소도 다른 상태와 평가를 저장합니다.</p>
             </article>
             <article>
                 <h3>취향 궁합 평가</h3>
@@ -96,7 +96,7 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
             </article>
             <article>
                 <h3>상황별 추천</h3>
-                <p>데이트, 가족 외식, 가성비, 조용한 곳 같은 상황 태그로 후보를 추천합니다.</p>
+                <p>약속, 함께 외식, 가성비, 조용한 곳 같은 상황 태그로 후보를 추천합니다.</p>
             </article>
             <article>
                 <h3>방문 기록</h3>

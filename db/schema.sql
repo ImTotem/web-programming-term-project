@@ -9,7 +9,7 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    type ENUM('couple', 'family', 'friends') NOT NULL DEFAULT 'family',
+    type VARCHAR(30) NOT NULL DEFAULT 'custom',
     invite_code VARCHAR(20) NOT NULL UNIQUE,
     owner_user_id INT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -120,11 +120,10 @@ CREATE TABLE restaurant_tags (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO tags (name, type) VALUES
-('데이트', 'situation'),
-('가족 외식', 'situation'),
+('약속', 'situation'),
+('함께 외식', 'situation'),
 ('가성비', 'situation'),
 ('조용한 곳', 'mood'),
 ('가까운 곳', 'situation'),
 ('카페', 'food'),
 ('특별한 날', 'situation');
-
