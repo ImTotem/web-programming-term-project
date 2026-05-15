@@ -25,8 +25,13 @@ $currentUser = auth_current_user();
         <nav class="nav">
             <?php if ($currentUser): ?>
                 <a href="#map-panel">지도</a>
-                <span><?= tastemap_h($currentUser['nickname']) ?>님</span>
-                <a href="logout.php">로그아웃</a>
+                <details class="profile-menu">
+                    <summary><?= tastemap_h($currentUser['nickname']) ?>님</summary>
+                    <div class="profile-menu-list">
+                        <a href="profile.php">내정보</a>
+                        <a href="logout.php">로그아웃</a>
+                    </div>
+                </details>
             <?php else: ?>
                 <a href="#features">기능</a>
                 <a href="#schema">DB 설계</a>
@@ -140,6 +145,19 @@ $currentUser = auth_current_user();
                 <div id="map" class="map-box app-map">
                     <p>카카오맵 API 키를 설정하면 이 영역에 지도가 표시됩니다.</p>
                 </div>
+                <div id="map-action-panel" class="map-action-panel is-empty">
+                    <div>
+                        <span class="panel-kicker">선택한 장소</span>
+                        <strong id="selected-place-name">검색 결과를 누르면 이곳에 분석 도구가 열립니다.</strong>
+                        <p id="selected-place-address">지도 위에서 미식 기록, 메뉴 사진, 별점 메모를 이어서 작성합니다.</p>
+                    </div>
+                    <div class="map-action-row">
+                        <button type="button" data-action="write-visit-note">미식 기록</button>
+                        <button type="button" data-action="upload-menu-photo">메뉴 사진</button>
+                        <button type="button" data-action="write-rating-note">별점 메모</button>
+                        <button type="button" data-action="manual-place-mode">지도에서 직접 추가</button>
+                    </div>
+                </div>
             </div>
 
             <aside class="app-side-panel">
@@ -155,12 +173,16 @@ $currentUser = auth_current_user();
                             <option value="FD6">음식점</option>
                             <option value="CE7">카페</option>
                         </select>
+                        <p class="field-note">Kakao Local API는 카테고리 목록 조회 API를 제공하지 않습니다.</p>
                     </div>
                     <button type="submit">검색</button>
                 </form>
 
                 <section class="side-section results-section">
-                    <h3>검색 결과</h3>
+                    <div class="section-heading">
+                        <h3>검색 결과</h3>
+                        <span id="result-count">0개</span>
+                    </div>
                     <ul id="place-results">
                         <li class="empty">검색어를 입력하면 장소 후보가 표시됩니다.</li>
                     </ul>
