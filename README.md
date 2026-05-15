@@ -13,7 +13,10 @@
 
 1. `config.example.php`를 복사해 `config.php`를 만듭니다.
 2. 카카오 개발자 콘솔에서 REST API 키와 JavaScript 키를 발급받아 입력합니다.
-3. phpMyAdmin에서 `db/schema.sql`을 `mydb` 데이터베이스에 실행합니다.
+3. 카카오 개발자 콘솔의 플랫폼 설정에서 Web 사이트 도메인에 `http://localhost:8080`을 등록합니다.
+4. phpMyAdmin에서 `db/schema.sql`을 `mydb` 데이터베이스에 실행합니다.
+
+지도 스크립트에서 401이 발생하면 JavaScript 키가 잘못되었거나 Web 플랫폼 도메인이 등록되지 않은 경우가 많습니다. 장소 검색 API에서 401이 발생하면 REST API 키를 확인해야 합니다.
 
 ## 현재 포함된 것
 

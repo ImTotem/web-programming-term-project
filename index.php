@@ -1,8 +1,9 @@
 <?php
-require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/auth.php';
 
 $config = tastemap_config();
 $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
+$currentUser = auth_current_user();
 ?>
 <!doctype html>
 <html lang="ko">
@@ -25,6 +26,13 @@ $hasKakaoJsKey = tastemap_has_real_key($config['kakao_javascript_key']);
             <a href="#features">기능</a>
             <a href="#schema">DB 설계</a>
             <a href="docs/tastemap-design.md">기획 문서</a>
+            <?php if ($currentUser): ?>
+                <span><?= tastemap_h($currentUser['nickname']) ?>님</span>
+                <a href="logout.php">로그아웃</a>
+            <?php else: ?>
+                <a href="login.php">로그인</a>
+                <a class="nav-cta" href="register.php">회원가입</a>
+            <?php endif; ?>
         </nav>
     </header>
 
