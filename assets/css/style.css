@@ -659,7 +659,6 @@ main {
 
 .note-form input:not([type="hidden"]):not([type="file"]),
 .note-form textarea,
-.file-upload-button,
 .file-upload-preview,
 .rating-input-area {
     width: min(100%, 480px);
@@ -675,6 +674,22 @@ main {
     font-weight: 500;
 }
 
+.file-upload-control {
+    width: 100%;
+}
+
+.file-upload-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.file-upload-header .form-label {
+    margin-bottom: 0;
+}
+
 .visually-hidden {
     position: absolute !important;
     width: 1px !important;
@@ -688,43 +703,22 @@ main {
 }
 
 .file-upload-button {
-    min-height: 104px;
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    border: 1px dashed var(--hairline-strong);
+    border: 0;
     border-radius: var(--radius-md);
-    padding: 18px;
-    background: var(--canvas-soft);
+    padding: 9px 13px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
     cursor: pointer;
 }
 
-.file-upload-button.is-dragging {
-    border-color: var(--text-link);
-    background: rgba(13, 116, 206, 0.08);
-    box-shadow: inset 0 0 0 2px rgba(13, 116, 206, 0.16);
-}
-
 .file-upload-button span {
-    border-radius: var(--radius-md);
-    padding: 10px 14px;
-    background: var(--primary);
-    color: var(--on-primary);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1;
-}
-
-.file-drop-hint {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.4;
-}
-
-.file-upload-button.is-dragging .file-drop-hint {
-    color: var(--text-link);
+    display: block;
 }
 
 .file-upload-preview {
@@ -735,6 +729,12 @@ main {
     border-radius: var(--radius-md);
     padding: 10px;
     background: var(--canvas-soft);
+}
+
+.file-upload-preview.is-dragging {
+    border-color: var(--text-link);
+    background: rgba(13, 116, 206, 0.08);
+    box-shadow: inset 0 0 0 2px rgba(13, 116, 206, 0.16);
 }
 
 .file-upload-preview-list {

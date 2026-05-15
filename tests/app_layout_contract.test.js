@@ -95,6 +95,11 @@ assert(
 );
 
 assert(
+    /file-upload-header/.test(index + css) && /file-upload-control\s*\{[^}]*width:\s*100%/s.test(css) && /file-upload-button/.test(index) && !/file-drop-hint/.test(index) && !/min-height:\s*104px/.test(css),
+    'photo upload button should sit beside the label without a large centered drop zone'
+);
+
+assert(
     /multiple/.test(index) && /name="photos\[\]"/.test(index) && /note-photo-preview-list/.test(index),
     'photo upload should accept more than one image'
 );
@@ -125,7 +130,7 @@ assert(
 );
 
 assert(
-    /드롭해서도 업로드/.test(index) && /file-drop-hint/.test(index + css) && /is-dragging/.test(app + css) && !/note-photo-name/.test(index + app),
+    /is-dragging/.test(app + css) && /note-photo-preview/.test(app) && !/note-photo-name/.test(index + app),
     'photo upload control should guide and support dropping files'
 );
 

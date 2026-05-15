@@ -446,9 +446,10 @@
     function bindFileUpload() {
         var input = $('#note-photo');
         var uploadButton = $('.file-upload-button');
+        var uploadPreview = $('#note-photo-preview');
         var previewList = $('#note-photo-preview-list');
 
-        if (!input || !uploadButton || !previewList) {
+        if (!input || !uploadButton || !uploadPreview || !previewList) {
             return;
         }
 
@@ -460,18 +461,21 @@
 
         uploadButton.addEventListener('dragover', function (event) {
             event.preventDefault();
-            uploadButton.classList.add('is-dragging');
+            uploadPreview.hidden = false;
+            uploadPreview.classList.add('is-dragging');
         });
 
         uploadButton.addEventListener('dragleave', function () {
-            uploadButton.classList.remove('is-dragging');
+            uploadPreview.classList.remove('is-dragging');
+            uploadPreview.hidden = !selectedPhotoFiles.length;
         });
 
         uploadButton.addEventListener('drop', function (event) {
             event.preventDefault();
-            uploadButton.classList.remove('is-dragging');
+            uploadPreview.classList.remove('is-dragging');
 
             if (!event.dataTransfer || !event.dataTransfer.files.length) {
+                uploadPreview.hidden = !selectedPhotoFiles.length;
                 return;
             }
 
