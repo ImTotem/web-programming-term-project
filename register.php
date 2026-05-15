@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>회원가입 - 우리들의 맛집 지도</title>
-    <link rel="stylesheet" href="<?= tastemap_asset('assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= tastemap_asset_versioned('assets/css/style.css') ?>">
 </head>
 <body class="auth-page">
     <main class="auth-shell">

@@ -11,7 +11,7 @@ $currentUser = auth_current_user();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= tastemap_h($config['app_name']) ?></title>
-    <link rel="stylesheet" href="<?= tastemap_asset('assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= tastemap_asset_versioned('assets/css/style.css') ?>">
     <?php if ($hasKakaoJsKey): ?>
         <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<?= tastemap_h($config['kakao_javascript_key']) ?>&libraries=services"></script>
     <?php endif; ?>
@@ -164,6 +164,6 @@ $currentUser = auth_current_user();
     <script>
         window.TASTEMAP_HAS_KAKAO = <?= $hasKakaoJsKey ? 'true' : 'false' ?>;
     </script>
-    <script src="<?= tastemap_asset('assets/js/app.js') ?>"></script>
+    <script src="<?= tastemap_asset_versioned('assets/js/app.js') ?>"></script>
 </body>
 </html>
