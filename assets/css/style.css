@@ -718,12 +718,48 @@ main {
     gap: 10px;
 }
 
-.file-upload-preview-list img {
+.photo-preview-item {
+    position: relative;
+    display: block;
+    margin: 0;
+    cursor: grab;
+    touch-action: none;
+}
+
+.photo-preview-item.is-moving {
+    opacity: 0.72;
+    cursor: grabbing;
+    transform: scale(0.97);
+}
+
+.photo-preview-item img {
     display: block;
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
     border-radius: 8px;
+}
+
+.photo-preview-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.photo-preview-remove:focus-visible {
+    outline: 2px solid rgba(13, 116, 206, 0.36);
+    outline-offset: 2px;
 }
 
 textarea {

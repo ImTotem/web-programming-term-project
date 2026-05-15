@@ -87,6 +87,16 @@ assert(
 );
 
 assert(
+    /removePhotoAt/.test(app) && /data-action="remove-photo"/.test(app) && /photo-preview-remove/.test(css),
+    'uploaded photo previews should expose an x button for removing an image'
+);
+
+assert(
+    /movePhoto/.test(app) && /draggable/.test(app) && /bindPhotoPreviewActions/.test(app) && /photo-preview-item/.test(css),
+    'uploaded photo previews should support drag reordering'
+);
+
+assert(
     /드롭해서도 업로드/.test(index) && /file-drop-hint/.test(index + css) && /is-dragging/.test(app + css) && !/note-photo-name/.test(index + app),
     'photo upload control should guide and support dropping files'
 );

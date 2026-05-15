@@ -8,6 +8,8 @@
     var selectedIndex = null;
     var selectedPhotoFiles = [];
     var photoPreviewUrls = [];
+    var draggedPhotoIndex = null;
+    var longPressTimer = null;
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
     function $(selector) {
@@ -334,10 +336,13 @@
     function bindFileUpload() {
         var input = $('#note-photo');
         var uploadButton = $('.file-upload-button');
+        var previewList = $('#note-photo-preview-list');
 
-        if (!input || !uploadButton) {
+        if (!input || !uploadButton || !previewList) {
             return;
         }
+
+        bindPhotoPreviewActions(input, previewList);
 
         input.addEventListener('change', function () {
             appendSelectedPhotos(input.files, input);
@@ -407,16 +412,148 @@
             return;
         }
 
-        files.forEach(function (file) {
+        files.forEach(function (file, index) {
             var url = URL.createObjectURL(file);
+            var item = document.createElement('figure');
             var image = document.createElement('img');
+            var removeButton = document.createElement('button');
+
             photoPreviewUrls.push(url);
+            item.className = 'photo-preview-item';
+            item.draggable = true;
+            item.dataset.index = String(index);
+
             image.src = url;
             image.alt = file.name || '업로드한 사진';
-            list.appendChild(image);
+
+            removeButton.type = 'button';
+            removeButton.className = 'photo-preview-remove';
+            removeButton.dataset.action = 'remove-photo';
+            removeButton.setAttribute('aria-label', '사진 제거');
+            removeButton.textContent = '×';
+
+            item.appendChild(image);
+            item.appendChild(removeButton);
+            list.appendChild(item);
         });
 
         preview.hidden = false;
+    }
+
+    function bindPhotoPreviewActions(input, list) {
+        list.addEventListener('click', function (event) {
+            var removeButton = event.target.closest('[data-action="remove-photo"]');
+            if (!removeButton) {
+                return;
+            }
+
+            var item = removeButton.closest('.photo-preview-item');
+            removePhotoAt(Number(item.dataset.index), input);
+        });
+
+        list.addEventListener('dragstart', function (event) {
+            var item = event.target.closest('.photo-preview-item');
+            if (!item) {
+                return;
+            }
+
+            draggedPhotoIndex = Number(item.dataset.index);
+            item.classList.add('is-moving');
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', item.dataset.index);
+            }
+        });
+
+        list.addEventListener('dragover', function (event) {
+            if (draggedPhotoIndex === null) {
+                return;
+            }
+            event.preventDefault();
+        });
+
+        list.addEventListener('drop', function (event) {
+            var item = event.target.closest('.photo-preview-item');
+            event.preventDefault();
+            if (!item || draggedPhotoIndex === null) {
+                return;
+            }
+
+            movePhoto(draggedPhotoIndex, Number(item.dataset.index), input);
+            draggedPhotoIndex = null;
+        });
+
+        list.addEventListener('dragend', function () {
+            draggedPhotoIndex = null;
+            clearPhotoMovingState(list);
+        });
+
+        list.addEventListener('pointerdown', function (event) {
+            var item = event.target.closest('.photo-preview-item');
+            if (!item || event.target.closest('[data-action="remove-photo"]')) {
+                return;
+            }
+
+            longPressTimer = setTimeout(function () {
+                draggedPhotoIndex = Number(item.dataset.index);
+                item.classList.add('is-moving');
+            }, 280);
+        });
+
+        list.addEventListener('pointermove', function (event) {
+            if (draggedPhotoIndex === null) {
+                return;
+            }
+
+            var target = document.elementFromPoint(event.clientX, event.clientY);
+            var item = target ? target.closest('.photo-preview-item') : null;
+            if (!item) {
+                return;
+            }
+
+            var targetIndex = Number(item.dataset.index);
+            if (targetIndex !== draggedPhotoIndex) {
+                movePhoto(draggedPhotoIndex, targetIndex, input);
+                draggedPhotoIndex = targetIndex;
+            }
+        });
+
+        list.addEventListener('pointerup', function () {
+            clearTimeout(longPressTimer);
+            draggedPhotoIndex = null;
+            clearPhotoMovingState(list);
+        });
+
+        list.addEventListener('pointerleave', function () {
+            clearTimeout(longPressTimer);
+        });
+    }
+
+    function removePhotoAt(index, input) {
+        if (index < 0 || index >= selectedPhotoFiles.length) {
+            return;
+        }
+
+        selectedPhotoFiles.splice(index, 1);
+        syncPhotoInput(input);
+        showPhotoPreview(selectedPhotoFiles);
+    }
+
+    function movePhoto(fromIndex, toIndex, input) {
+        if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0 || fromIndex >= selectedPhotoFiles.length || toIndex >= selectedPhotoFiles.length) {
+            return;
+        }
+
+        var moved = selectedPhotoFiles.splice(fromIndex, 1)[0];
+        selectedPhotoFiles.splice(toIndex, 0, moved);
+        syncPhotoInput(input);
+        showPhotoPreview(selectedPhotoFiles);
+    }
+
+    function clearPhotoMovingState(list) {
+        list.querySelectorAll('.photo-preview-item').forEach(function (item) {
+            item.classList.remove('is-moving');
+        });
     }
 
     function bindStarRating() {
