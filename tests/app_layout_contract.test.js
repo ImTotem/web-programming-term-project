@@ -37,8 +37,8 @@ assert(
 );
 
 assert(
-    /id="map-action-panel"/.test(index) && /data-action="manual-place-mode"/.test(index),
-    'map should contain contextual place actions and manual location mode'
+    !/id="map-action-panel"/.test(index) && /id="map-fab-dock"/.test(index),
+    'map actions should use a bottom-right floating action button instead of a wide panel'
 );
 
 assert(
@@ -52,7 +52,7 @@ assert(
 );
 
 assert(
-    /data-action="open-note-modal"/.test(index) && /id="place-note-modal"/.test(index),
+    /data-action="primary-map-action"/.test(index) && /id="place-note-modal"/.test(index),
     'culinary note, menu photo, and rating should be collected in one modal'
 );
 
@@ -62,8 +62,18 @@ assert(
 );
 
 assert(
-    /width:\s*min\(calc\(100%\s*-\s*32px\),\s*360px\)/.test(css),
-    'map action panel should be compact instead of spanning the map width'
+    /function togglePlaceSelection/.test(app) && /function clearPlaceSelection/.test(app),
+    'clicking a selected result again should cancel the selection'
+);
+
+assert(
+    /record-quick-actions/.test(index) && /data-action="add-note"/.test(index) && /data-action="edit-note"/.test(index),
+    'places with existing records should expose add and edit buttons next to the circular action'
+);
+
+assert(
+    /\.map-fab-dock/.test(css) && /border-radius:\s*50%/.test(css),
+    'map action should be a circular bottom-right button'
 );
 
 assert(

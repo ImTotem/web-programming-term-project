@@ -4,6 +4,8 @@
     var infoWindow = null;
     var manualMarker = null;
     var manualMode = false;
+    var selectedPlace = null;
+    var selectedIndex = null;
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
     function $(selector) {
@@ -52,13 +54,13 @@
         var list = $('#place-results');
         list.innerHTML = '';
         updateResultCount(totalCount || places.length);
+        clearPlaceSelection();
+        clearMarkers();
 
         if (!places.length) {
             list.innerHTML = '<li class="empty">검색 결과가 없습니다.</li>';
             return;
         }
-
-        clearMarkers();
 
         places.forEach(function (place, index) {
             var item = document.createElement('li');
@@ -83,7 +85,7 @@
                 markers.push(marker);
 
                 kakao.maps.event.addListener(marker, 'click', function () {
-                    focusPlace(index, place);
+                    selectPlace(index, place);
                 });
 
                 if (index === 0) {
@@ -95,7 +97,7 @@
                 if (event.target.closest('[data-skip-focus="true"]')) {
                     return;
                 }
-                focusPlace(index, place);
+                togglePlaceSelection(index, place);
             });
 
             item.addEventListener('keydown', function (event) {
@@ -103,10 +105,48 @@
                     return;
                 }
                 event.preventDefault();
-                focusPlace(index, place);
+                togglePlaceSelection(index, place);
             });
 
         });
+    }
+
+    function togglePlaceSelection(index, place) {
+        if (selectedIndex === index) {
+            clearPlaceSelection();
+            return;
+        }
+
+        selectPlace(index, place);
+    }
+
+    function selectPlace(index, place) {
+        selectedIndex = index;
+        selectedPlace = place;
+        focusPlace(index, place);
+    }
+
+    function clearPlaceSelection() {
+        manualMode = false;
+        var list = $('#place-results');
+        var items = list ? list.querySelectorAll('.place-item') : [];
+        items.forEach(function (item) {
+            item.classList.remove('is-active');
+        });
+
+        markers.forEach(function (marker) {
+            if (typeof marker.setZIndex === 'function') {
+                marker.setZIndex(1);
+            }
+        });
+
+        if (infoWindow && typeof infoWindow.close === 'function') {
+            infoWindow.close();
+        }
+
+        selectedIndex = null;
+        selectedPlace = null;
+        updateFabState();
     }
 
     function focusPlace(index, place) {
@@ -147,7 +187,7 @@
             infoWindow.open(map, markers[index]);
         }
 
-        updateMapActionPanel(place.place_name, place.road_address_name || place.address_name || '', false);
+        updateFabState(place);
     }
 
     function addManualPlace(position) {
@@ -167,27 +207,40 @@
         }
 
         map.setCenter(position);
-        updateMapActionPanel(
-            '수동 지정 장소',
-            '위도 ' + position.getLat().toFixed(6) + ', 경도 ' + position.getLng().toFixed(6),
-            true
-        );
+        selectedPlace = {
+            place_name: '수동 지정 장소',
+            road_address_name: '위도 ' + position.getLat().toFixed(6) + ', 경도 ' + position.getLng().toFixed(6),
+            is_manual: true
+        };
+        selectedIndex = null;
+        updateFabState(selectedPlace);
     }
 
-    function updateMapActionPanel(name, address, isManual) {
-        var panel = $('#map-action-panel');
-        var title = $('#selected-place-name');
-        var description = $('#selected-place-address');
+    function updateFabState(place) {
+        var dock = $('#map-fab-dock');
+        var fab = $('[data-action="primary-map-action"]');
+        var symbol = $('#map-fab-symbol');
+        var quickActions = $('.record-quick-actions');
 
-        if (!panel || !title || !description) {
+        if (!dock || !fab || !symbol || !quickActions) {
             return;
         }
 
-        panel.classList.remove('is-empty');
-        title.textContent = name;
-        description.textContent = isManual
-            ? address + ' 지점을 기준으로 직접 장소를 등록할 수 있습니다.'
-            : address || '주소 정보가 없는 장소입니다.';
+        var activePlace = place || selectedPlace;
+        var hasRecord = !!(activePlace && (activePlace.has_record || activePlace.record_id));
+
+        quickActions.hidden = !hasRecord;
+
+        if (!activePlace) {
+            dock.dataset.mode = 'manual';
+            fab.setAttribute('aria-label', '지도에서 직접 추가');
+            symbol.textContent = '+';
+            return;
+        }
+
+        dock.dataset.mode = hasRecord ? 'recorded' : 'record';
+        fab.setAttribute('aria-label', hasRecord ? '기록 보기' : '기록 작성');
+        symbol.textContent = hasRecord ? '⋯' : '✎';
     }
 
     function updateResultCount(count) {
@@ -243,37 +296,46 @@
     }
 
     function bindMapActions() {
-        var manualButton = $('[data-action="manual-place-mode"]');
-        var noteButton = $('[data-action="open-note-modal"]');
+        var primaryButton = $('[data-action="primary-map-action"]');
+        var addNoteButton = $('[data-action="add-note"]');
+        var editNoteButton = $('[data-action="edit-note"]');
         var modal = $('#place-note-modal');
 
-        if (manualButton) {
-            manualButton.addEventListener('click', function () {
-                manualMode = true;
-                var panel = $('#map-action-panel');
-                var title = $('#selected-place-name');
-                var description = $('#selected-place-address');
-
-                if (panel && title && description) {
-                    panel.classList.add('is-manual-mode');
-                    panel.classList.remove('is-empty');
-                    title.textContent = '지도에서 위치를 클릭하세요';
-                    description.textContent = '검색에 없는 가게도 지도에서 직접 지정할 수 있습니다.';
+        if (primaryButton) {
+            primaryButton.addEventListener('click', function () {
+                if (selectedPlace) {
+                    openNoteModal();
+                    return;
                 }
+                manualMode = true;
+                primaryButton.setAttribute('aria-label', '지도에서 위치를 클릭하세요');
             });
         }
 
-        if (noteButton && modal) {
-            noteButton.addEventListener('click', function () {
-                modal.hidden = false;
-            });
+        if (addNoteButton) {
+            addNoteButton.addEventListener('click', openNoteModal);
+        }
 
+        if (editNoteButton) {
+            editNoteButton.addEventListener('click', openNoteModal);
+        }
+
+        if (modal) {
             modal.addEventListener('click', function (event) {
                 if (event.target === modal || event.target.closest('[data-action="close-note-modal"]')) {
                     modal.hidden = true;
                 }
             });
         }
+    }
+
+    function openNoteModal() {
+        var modal = $('#place-note-modal');
+        if (!modal) {
+            return;
+        }
+
+        modal.hidden = false;
     }
 
     document.addEventListener('DOMContentLoaded', function () {

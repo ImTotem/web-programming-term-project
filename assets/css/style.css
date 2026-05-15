@@ -455,84 +455,67 @@ main {
     top: 20px;
 }
 
-.map-action-panel {
+.map-fab-dock {
     position: absolute;
-    left: 16px;
+    right: 18px;
     bottom: 16px;
-    width: min(calc(100% - 32px), 360px);
-    display: grid;
-    gap: 10px;
-    border: 1px solid rgba(220, 222, 224, 0.94);
-    border-radius: var(--radius-lg);
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 18px 48px rgba(23, 23, 23, 0.14);
-    backdrop-filter: blur(18px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
     z-index: 3;
 }
 
-.map-action-panel.is-empty {
-    color: var(--body);
-}
-
-.map-action-panel.is-manual-mode {
-    border-color: var(--text-link);
-}
-
-.panel-kicker {
-    display: block;
-    margin-bottom: 3px;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: 0.88px;
-    text-transform: uppercase;
-}
-
-.map-action-panel strong {
-    display: block;
-    color: var(--ink);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.35;
-}
-
-.map-action-panel p {
-    margin: 4px 0 0;
-    color: var(--body);
-    font-size: 12px;
-    line-height: 1.45;
-}
-
-.map-action-row {
+.record-quick-actions {
     display: flex;
-    flex-wrap: wrap;
     gap: 8px;
 }
 
-.map-action-row button {
-    min-height: 32px;
-    border: 1px solid var(--hairline-strong);
-    border-radius: var(--radius-md);
-    padding: 8px 10px;
-    background: var(--surface-card);
+.record-quick-actions[hidden] {
+    display: none;
+}
+
+.record-quick-actions button {
+    min-height: 38px;
+    border: 1px solid rgba(220, 222, 224, 0.94);
+    border-radius: 9999px;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.96);
     color: var(--ink);
+    box-shadow: 0 12px 34px rgba(23, 23, 23, 0.16);
     font: inherit;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(18px);
+}
+
+.map-fab {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--on-primary);
+    box-shadow: 0 16px 40px rgba(23, 23, 23, 0.26);
+    font: inherit;
+    font-size: 30px;
+    font-weight: 600;
     line-height: 1;
     cursor: pointer;
 }
 
-.map-action-row button:hover {
-    border-color: var(--ink);
+.map-fab:hover {
+    background: var(--primary-active);
 }
 
-.map-action-row [data-action="manual-place-mode"] {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: var(--on-primary);
+.map-fab-dock[data-mode="record"] .map-fab {
+    font-size: 23px;
+}
+
+.map-fab-dock[data-mode="recorded"] .map-fab {
+    background: var(--text-link);
 }
 
 .app-map {

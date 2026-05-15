@@ -145,16 +145,14 @@ $currentUser = auth_current_user();
                 <div id="map" class="map-box app-map">
                     <p>카카오맵 API 키를 설정하면 이 영역에 지도가 표시됩니다.</p>
                 </div>
-                <div id="map-action-panel" class="map-action-panel is-empty">
-                    <div>
-                        <span class="panel-kicker">선택한 장소</span>
-                        <strong id="selected-place-name">검색 결과를 누르면 이곳에 분석 도구가 열립니다.</strong>
-                        <p id="selected-place-address">기록, 사진, 별점을 한 번에 남깁니다.</p>
+                <div id="map-fab-dock" class="map-fab-dock" data-mode="manual">
+                    <div class="record-quick-actions" hidden>
+                        <button type="button" data-action="add-note">기록 추가</button>
+                        <button type="button" data-action="edit-note">수정</button>
                     </div>
-                    <div class="map-action-row">
-                        <button type="button" data-action="open-note-modal">기록 작성</button>
-                        <button type="button" data-action="manual-place-mode">지도에서 직접 추가</button>
-                    </div>
+                    <button type="button" class="map-fab" data-action="primary-map-action" aria-label="지도에서 직접 추가">
+                        <span id="map-fab-symbol" aria-hidden="true">+</span>
+                    </button>
                 </div>
             </div>
 
