@@ -16,38 +16,42 @@ $currentUser = auth_current_user();
         <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<?= tastemap_h($config['kakao_javascript_key']) ?>&libraries=services"></script>
     <?php endif; ?>
 </head>
-<body>
+<body class="<?= $currentUser ? 'app-mode' : 'landing-mode' ?>">
     <header class="topbar">
         <div>
             <p class="eyebrow">Custom Group Restaurant Map</p>
             <h1>우리들의 맛집 지도</h1>
         </div>
         <nav class="nav">
-            <a href="#features">기능</a>
-            <a href="#schema">DB 설계</a>
-            <a href="docs/tastemap-design.md">기획 문서</a>
             <?php if ($currentUser): ?>
+                <a href="#map-panel">지도</a>
+                <a href="#saved-panel">저장 목록</a>
+                <a href="#stats-panel">통계</a>
                 <span><?= tastemap_h($currentUser['nickname']) ?>님</span>
                 <a href="logout.php">로그아웃</a>
             <?php else: ?>
+                <a href="#features">기능</a>
+                <a href="#schema">DB 설계</a>
+                <a href="docs/tastemap-design.md">기획 문서</a>
                 <a href="login.php">로그인</a>
                 <a class="nav-cta" href="register.php">회원가입</a>
             <?php endif; ?>
         </nav>
     </header>
 
+    <?php if (!$currentUser): ?>
     <main>
         <section class="hero">
             <div class="hero-copy">
                 <p class="eyebrow">카카오맵 기반 PHP/MySQL 텀프로젝트</p>
-                <h2>우리에게 맞는 맛집을 함께 고르는 지도</h2>
+                <h2>우리에게 맞는 맛집을 함께 기록하고 고르는 지도</h2>
                 <p>
-                    음식점과 카페를 검색하고, 우리 그룹의 방문 기록과 취향 평가를 쌓아
-                    다음 외식 장소를 추천하는 TasteMap 프로젝트 시작 화면입니다.
+                    원하는 그룹을 만들고, 장소 검색과 방문 기록, 취향 평가를 쌓아
+                    다음 외식 후보를 더 쉽게 고릅니다.
                 </p>
                 <div class="hero-actions">
-                    <a class="button primary" href="#map-panel">장소 검색하기</a>
-                    <a class="button secondary" href="db/schema.sql">DB 스키마 보기</a>
+                    <a class="button primary" href="register.php">시작하기</a>
+                    <a class="button secondary" href="login.php">로그인</a>
                 </div>
             </div>
             <div class="mockup-stage" aria-label="우리들의 맛집 지도 화면 미리보기">
@@ -82,42 +86,6 @@ $currentUser = auth_current_user();
                     <p>후보 12곳 중 우리 취향에 맞는 장소를 추천합니다.</p>
                     <button type="button">추천 보기</button>
                 </div>
-            </div>
-        </section>
-
-        <?php if (!$hasKakaoJsKey): ?>
-            <section class="notice">
-                <strong>카카오 JavaScript 키가 아직 없습니다.</strong>
-                <span><code>config.example.php</code>를 복사해 <code>config.php</code>를 만들고 API 키를 입력하면 지도가 활성화됩니다.</span>
-            </section>
-        <?php endif; ?>
-
-        <section id="map-panel" class="workspace">
-            <form class="search-panel" id="place-search-form">
-                <div>
-                    <label for="keyword">장소 검색</label>
-                    <input id="keyword" name="keyword" type="search" placeholder="예: 홍대 파스타, 강남 카페">
-                </div>
-                <div>
-                    <label for="category">카테고리</label>
-                    <select id="category" name="category">
-                        <option value="FD6">음식점</option>
-                        <option value="CE7">카페</option>
-                    </select>
-                </div>
-                <button type="submit">검색</button>
-            </form>
-
-            <div class="map-layout">
-                <div id="map" class="map-box">
-                    <p>카카오맵 API 키를 설정하면 이 영역에 지도가 표시됩니다.</p>
-                </div>
-                <aside class="results-panel">
-                    <h3>검색 결과</h3>
-                    <ul id="place-results">
-                        <li class="empty">검색어를 입력하면 음식점/카페 후보가 표시됩니다.</li>
-                    </ul>
-                </aside>
             </div>
         </section>
 
@@ -160,6 +128,71 @@ $currentUser = auth_current_user();
           + 태그 일치 점수 * 0.5</code></pre>
         </section>
     </main>
+    <?php else: ?>
+    <main class="app-shell">
+        <section class="app-intro">
+            <div>
+                <p class="eyebrow">Workspace</p>
+                <h2>오늘의 맛집 지도를 관리하세요</h2>
+                <p>지도는 그대로 두고, 검색 결과와 저장 후보만 옆에서 스크롤하며 비교합니다.</p>
+            </div>
+            <a class="button secondary" href="docs/tastemap-design.md">기획 문서</a>
+        </section>
+
+        <?php if (!$hasKakaoJsKey): ?>
+            <section class="notice">
+                <strong>카카오 JavaScript 키가 아직 없습니다.</strong>
+                <span><code>config.php</code>에 키를 입력하면 지도가 활성화됩니다.</span>
+            </section>
+        <?php endif; ?>
+
+        <section id="map-panel" class="app-workspace">
+            <div class="map-sticky-panel">
+                <div id="map" class="map-box app-map">
+                    <p>카카오맵 API 키를 설정하면 이 영역에 지도가 표시됩니다.</p>
+                </div>
+            </div>
+
+            <aside class="app-side-panel">
+                <form class="search-panel app-search-panel" id="place-search-form">
+                    <div>
+                        <label for="keyword">장소 검색</label>
+                        <input id="keyword" name="keyword" type="search" placeholder="예: 홍대 파스타, 강남 카페">
+                    </div>
+                    <div>
+                        <label for="category">카테고리</label>
+                        <select id="category" name="category">
+                            <option value="FD6">음식점</option>
+                            <option value="CE7">카페</option>
+                        </select>
+                    </div>
+                    <button type="submit">검색</button>
+                </form>
+
+                <section class="side-section">
+                    <h3>검색 결과</h3>
+                    <ul id="place-results">
+                        <li class="empty">검색어를 입력하면 음식점/카페 후보가 표시됩니다.</li>
+                    </ul>
+                </section>
+
+                <section id="saved-panel" class="side-section">
+                    <h3>저장 후보</h3>
+                    <div class="empty">아직 저장된 장소가 없습니다. 검색 결과에서 장소를 저장하는 기능이 다음 단계에 추가됩니다.</div>
+                </section>
+
+                <section id="stats-panel" class="side-section">
+                    <h3>우리 그룹 요약</h3>
+                    <div class="summary-grid">
+                        <span><strong>0</strong> 저장</span>
+                        <span><strong>0</strong> 방문</span>
+                        <span><strong>-</strong> 추천</span>
+                    </div>
+                </section>
+            </aside>
+        </section>
+    </main>
+    <?php endif; ?>
 
     <script>
         window.TASTEMAP_HAS_KAKAO = <?= $hasKakaoJsKey ? 'true' : 'false' ?>;
