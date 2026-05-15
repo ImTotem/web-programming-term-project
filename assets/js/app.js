@@ -6,6 +6,7 @@
     var manualMode = false;
     var selectedPlace = null;
     var selectedIndex = null;
+    var selectedPhotoFiles = [];
     var photoPreviewUrls = [];
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
@@ -339,7 +340,7 @@
         }
 
         input.addEventListener('change', function () {
-            showSelectedPhotos(input.files);
+            appendSelectedPhotos(input.files, input);
         });
 
         uploadButton.addEventListener('dragover', function (event) {
@@ -359,15 +360,32 @@
                 return;
             }
 
-            input.files = event.dataTransfer.files;
-            showSelectedPhotos(event.dataTransfer.files);
+            appendSelectedPhotos(event.dataTransfer.files, input);
         });
     }
 
-    function showSelectedPhotos(files) {
-        var selectedFiles = Array.prototype.slice.call(files || []);
+    function appendSelectedPhotos(files, input) {
+        var incomingFiles = Array.prototype.slice.call(files || []);
 
-        showPhotoPreview(selectedFiles);
+        if (!incomingFiles.length) {
+            return;
+        }
+
+        selectedPhotoFiles = selectedPhotoFiles.concat(incomingFiles);
+        syncPhotoInput(input);
+        showPhotoPreview(selectedPhotoFiles);
+    }
+
+    function syncPhotoInput(input) {
+        if (!input || typeof DataTransfer === 'undefined') {
+            return;
+        }
+
+        var transfer = new DataTransfer();
+        selectedPhotoFiles.forEach(function (file) {
+            transfer.items.add(file);
+        });
+        input.files = transfer.files;
     }
 
     function showPhotoPreview(files) {

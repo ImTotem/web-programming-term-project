@@ -82,6 +82,11 @@ assert(
 );
 
 assert(
+    /selectedPhotoFiles/.test(app) && /appendSelectedPhotos/.test(app) && /syncPhotoInput/.test(app) && /new DataTransfer/.test(app),
+    'newly selected photos should be appended instead of replacing previous selections'
+);
+
+assert(
     /드롭해서도 업로드/.test(index) && /file-drop-hint/.test(index + css) && /is-dragging/.test(app + css) && !/note-photo-name/.test(index + app),
     'photo upload control should guide and support dropping files'
 );
