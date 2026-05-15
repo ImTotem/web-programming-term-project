@@ -92,7 +92,7 @@ assert(
 );
 
 assert(
-    /setRatingValue/.test(app) && /aria-pressed/.test(index) && !/ratingFromPointer/.test(app) && !/getBoundingClientRect/.test(app) && /grid-template-columns:\s*repeat\(10,\s*20px\)/.test(css) && /button:nth-of-type\(10\)/.test(css),
+    /setRatingValue/.test(app) && /aria-pressed/.test(index) && !/ratingFromPointer/.test(app) && !/getBoundingClientRect/.test(app) && /grid-template-columns:\s*repeat\(10,\s*20px\)/.test(css) && /button:nth-of-type\(10\)/.test(css) && /button::before/.test(css) && /button:nth-of-type\(even\)::before/.test(css),
     'star rating should use deterministic tap targets aligned to the visible stars'
 );
 

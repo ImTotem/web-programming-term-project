@@ -736,7 +736,6 @@ textarea:focus {
 }
 
 .star-rating {
-    --rating-percent: 0%;
     position: relative;
     width: 200px;
     display: grid;
@@ -747,30 +746,9 @@ textarea:focus {
     justify-self: center;
 }
 
-.star-rating::before,
-.star-rating::after {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    align-self: center;
-    pointer-events: none;
-    font-size: 40px;
-    line-height: 1;
-    letter-spacing: 0;
-    content: "★★★★★";
-}
-
-.star-rating::before {
-    color: var(--hairline-strong);
-}
-
-.star-rating::after {
-    width: var(--rating-percent);
-    overflow: hidden;
-    color: #171717;
-    white-space: nowrap;
-}
-
 .star-rating button {
+    position: relative;
+    overflow: hidden;
     grid-row: 1;
     width: 20px;
     min-height: 48px;
@@ -779,6 +757,27 @@ textarea:focus {
     background: transparent;
     cursor: pointer;
     z-index: 1;
+}
+
+.star-rating button::before {
+    content: "★";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 40px;
+    color: var(--hairline-strong);
+    font-size: 40px;
+    line-height: 1;
+    text-align: center;
+    transform: translateY(-50%);
+}
+
+.star-rating button:nth-of-type(even)::before {
+    left: -20px;
+}
+
+.star-rating button[aria-pressed="true"]::before {
+    color: #171717;
 }
 
 .star-rating button:nth-of-type(1) {
