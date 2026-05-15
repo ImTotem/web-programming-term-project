@@ -67,8 +67,28 @@ assert(
 );
 
 assert(
+    /<span class="form-label">사진<\/span>/.test(index) && !/<span class="form-label">메뉴 사진<\/span>/.test(index),
+    'photo upload label should be "사진"'
+);
+
+assert(
+    /note-photo-preview/.test(index) && /showPhotoPreview/.test(app),
+    'uploaded photos should render a preview in the modal'
+);
+
+assert(
+    /드롭해서 업로드/.test(index) && /drop/.test(app),
+    'photo upload control should guide and support dropping files'
+);
+
+assert(
     /star-rating/.test(index) && /data-rating-step="0.5"/.test(index) && /bindStarRating/.test(app),
     'rating should use stars with half-point increments'
+);
+
+assert(
+    /setRatingValue/.test(app) && /getBoundingClientRect/.test(app),
+    'star rating should calculate half-point rating from click position'
 );
 
 assert(

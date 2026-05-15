@@ -6,6 +6,7 @@
     var manualMode = false;
     var selectedPlace = null;
     var selectedIndex = null;
+    var photoPreviewUrl = null;
     var defaultCenter = { lat: 37.566826, lng: 126.9786567 };
 
     function $(selector) {
@@ -332,15 +333,71 @@
     function bindFileUpload() {
         var input = $('#note-photo');
         var fileName = $('#note-photo-name');
+        var uploadButton = $('.file-upload-button');
 
-        if (!input || !fileName) {
+        if (!input || !fileName || !uploadButton) {
             return;
         }
 
         input.addEventListener('change', function () {
-            var file = input.files && input.files.length ? input.files[0] : null;
-            fileName.textContent = file ? file.name : '선택된 파일 없음';
+            showSelectedPhoto(input.files && input.files.length ? input.files[0] : null);
         });
+
+        uploadButton.addEventListener('dragover', function (event) {
+            event.preventDefault();
+            uploadButton.classList.add('is-dragging');
+        });
+
+        uploadButton.addEventListener('dragleave', function () {
+            uploadButton.classList.remove('is-dragging');
+        });
+
+        uploadButton.addEventListener('drop', function (event) {
+            event.preventDefault();
+            uploadButton.classList.remove('is-dragging');
+
+            if (!event.dataTransfer || !event.dataTransfer.files.length) {
+                return;
+            }
+
+            input.files = event.dataTransfer.files;
+            showSelectedPhoto(event.dataTransfer.files[0]);
+        });
+    }
+
+    function showSelectedPhoto(file) {
+        var fileName = $('#note-photo-name');
+
+        if (!fileName) {
+            return;
+        }
+
+        fileName.textContent = file ? file.name : '선택된 파일 없음 · 클릭하거나 드롭해서 업로드';
+        showPhotoPreview(file);
+    }
+
+    function showPhotoPreview(file) {
+        var preview = $('#note-photo-preview');
+        var image = $('#note-photo-preview-img');
+
+        if (!preview || !image) {
+            return;
+        }
+
+        if (photoPreviewUrl) {
+            URL.revokeObjectURL(photoPreviewUrl);
+            photoPreviewUrl = null;
+        }
+
+        if (!file) {
+            preview.hidden = true;
+            image.removeAttribute('src');
+            return;
+        }
+
+        photoPreviewUrl = URL.createObjectURL(file);
+        image.src = photoPreviewUrl;
+        preview.hidden = false;
     }
 
     function bindStarRating() {
@@ -354,15 +411,25 @@
 
         starRating.addEventListener('click', function (event) {
             var button = event.target.closest('[data-rating]');
-            if (!button) {
-                return;
-            }
-
-            var value = Number(button.dataset.rating);
-            rating.value = String(value);
-            ratingLabel.textContent = value.toFixed(1).replace(/\.0$/, '') + '점';
-            starRating.style.setProperty('--rating-percent', (value / 5 * 100) + '%');
+            var value = button ? Number(button.dataset.rating) : ratingFromPointer(event, starRating);
+            setRatingValue(value, rating, ratingLabel, starRating);
         });
+    }
+
+    function ratingFromPointer(event, starRating) {
+        var rect = starRating.getBoundingClientRect();
+        var x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width);
+        return Math.min(5, Math.max(0.5, Math.ceil((x / rect.width) * 10) / 2));
+    }
+
+    function setRatingValue(value, rating, ratingLabel, starRating) {
+        if (!value || Number.isNaN(value)) {
+            return;
+        }
+
+        rating.value = String(value);
+        ratingLabel.textContent = value.toFixed(1).replace(/\.0$/, '') + '점';
+        starRating.style.setProperty('--rating-percent', (value / 5 * 100) + '%');
     }
 
     function openNoteModal() {

@@ -666,6 +666,11 @@ main {
     cursor: pointer;
 }
 
+.file-upload-button.is-dragging {
+    border-color: var(--ink);
+    background: var(--surface-card);
+}
+
 .file-upload-button span {
     border-radius: var(--radius-md);
     padding: 10px 14px;
@@ -683,6 +688,21 @@ main {
     line-height: 1.4;
     overflow-wrap: anywhere;
     text-align: right;
+}
+
+.file-upload-preview {
+    margin-top: 10px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    background: var(--canvas-soft);
+}
+
+.file-upload-preview img {
+    display: block;
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
 }
 
 textarea {
@@ -713,8 +733,8 @@ textarea:focus {
     position: relative;
     width: max-content;
     display: grid;
-    grid-template-columns: repeat(10, 16px);
-    min-height: 36px;
+    grid-template-columns: repeat(10, 20px);
+    min-height: 44px;
 }
 
 .star-rating::before,
@@ -723,7 +743,7 @@ textarea:focus {
     grid-row: 1;
     align-self: center;
     pointer-events: none;
-    font-size: 32px;
+    font-size: 40px;
     line-height: 1;
     letter-spacing: 0;
     content: "★★★★★";
@@ -742,8 +762,8 @@ textarea:focus {
 
 .star-rating button {
     grid-row: 1;
-    width: 16px;
-    min-height: 36px;
+    width: 20px;
+    min-height: 44px;
     border: 0;
     padding: 0;
     background: transparent;
