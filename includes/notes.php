@@ -40,6 +40,9 @@ function notes_save_visit($userId, array $payload, array $files)
             'restaurant_id' => $restaurantId,
             'photo_count' => $photoCount,
         ];
+    } catch (InvalidArgumentException $e) {
+        $conn->rollback();
+        return ['ok' => false, 'error' => $e->getMessage()];
     } catch (Throwable $e) {
         $conn->rollback();
         return ['ok' => false, 'error' => '기록 저장 중 오류가 발생했습니다.'];
@@ -190,8 +193,11 @@ function notes_store_visit_photos(mysqli $conn, $visitId, array $files)
         if ($errors[$index] === UPLOAD_ERR_NO_FILE) {
             continue;
         }
-        if ($errors[$index] !== UPLOAD_ERR_OK || $sizes[$index] > 5 * 1024 * 1024) {
-            throw new RuntimeException('사진 업로드에 실패했습니다.');
+        if ($errors[$index] === UPLOAD_ERR_INI_SIZE || $errors[$index] === UPLOAD_ERR_FORM_SIZE || $sizes[$index] > 5 * 1024 * 1024) {
+            throw new InvalidArgumentException('사진은 한 장당 5MB 이하로 업로드하세요.');
+        }
+        if ($errors[$index] !== UPLOAD_ERR_OK) {
+            throw new InvalidArgumentException('사진 업로드에 실패했습니다. 다시 선택해 주세요.');
         }
 
         $extension = notes_image_extension($tmpNames[$index]);
@@ -226,7 +232,7 @@ function notes_image_extension($tmpPath)
     ];
 
     if (!isset($extensions[$mime])) {
-        throw new RuntimeException('지원하지 않는 사진 형식입니다.');
+        throw new InvalidArgumentException('사진은 JPG, PNG, WebP, GIF 형식만 업로드할 수 있습니다.');
     }
 
     return $extensions[$mime];

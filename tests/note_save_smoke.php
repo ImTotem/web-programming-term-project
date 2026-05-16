@@ -77,9 +77,27 @@ $visit = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 assert_true($visit['name'] === '노트 저장 테스트 식당', '식당 이름이 저장되어야 합니다.');
-assert_true($visit['menu_name'] === '테스트 메뉴', '대표 메뉴가 저장되어야 합니다.');
+assert_true($visit['menu_name'] === '테스트 메뉴', '먹은 메뉴가 저장되어야 합니다.');
 assert_true((string) $visit['rating'] === '4.5', '0.5 단위 별점이 저장되어야 합니다.');
 assert_true($visit['note'] === '미식 기록 저장 테스트', '미식 기록이 저장되어야 합니다.');
+
+$payload['menu'] = '두 번째 테스트 메뉴';
+$payload['note'] = '같은 장소에 두 번째 기록 저장 테스트';
+$secondResult = notes_save_visit($userId, $payload, []);
+assert_true($secondResult['ok'] === true, '이미 저장된 같은 장소에도 기록이 추가 저장되어야 합니다.');
+assert_true((int) $secondResult['visit_id'] > 0, '두 번째 방문 기록 ID가 있어야 합니다.');
+
+$oversizedPhoto = [
+    'photos' => [
+        'name' => ['too-large.png'],
+        'tmp_name' => [''],
+        'error' => [UPLOAD_ERR_INI_SIZE],
+        'size' => [0],
+    ],
+];
+$oversizedResult = notes_save_visit($userId, $payload, $oversizedPhoto);
+assert_true($oversizedResult['ok'] === false, 'PHP 업로드 한도를 넘은 사진은 저장되지 않아야 합니다.');
+assert_true(strpos($oversizedResult['error'], '사진') !== false && strpos($oversizedResult['error'], '5MB') !== false, '사진 업로드 용량 오류를 사용자에게 알려야 합니다.');
 
 delete_note_test_user($email);
 

@@ -8,6 +8,7 @@ const profile = fs.existsSync('profile.php') ? fs.readFileSync('profile.php', 'u
 const schema = fs.readFileSync('db/schema.sql', 'utf8');
 const saveNoteApi = fs.existsSync('api/save_note.php') ? fs.readFileSync('api/save_note.php', 'utf8') : '';
 const notes = fs.existsSync('includes/notes.php') ? fs.readFileSync('includes/notes.php', 'utf8') : '';
+const htaccess = fs.existsSync('.htaccess') ? fs.readFileSync('.htaccess', 'utf8') : '';
 
 assert(
     /<option value="">전체<\/option>/.test(index),
@@ -70,6 +71,11 @@ assert(
 );
 
 assert(
+    /upload_max_filesize\s+10M/.test(htaccess) && /post_max_size\s+40M/.test(htaccess),
+    'photo uploads should allow ordinary phone images instead of failing at the PHP 2MB default'
+);
+
+assert(
     /menu_name VARCHAR\(150\)/.test(schema) && /rating DECIMAL\(2,1\)/.test(schema),
     'visits table should store the representative menu and half-point rating'
 );
@@ -82,6 +88,11 @@ assert(
 assert(
     index.indexOf('id="note-photo"') < index.indexOf('id="note-menu"'),
     'photo upload should appear before menu and note fields'
+);
+
+assert(
+    /먹은 메뉴/.test(index) && !/대표 메뉴/.test(index),
+    'menu field should use meal-log wording instead of representative menu wording'
 );
 
 assert(

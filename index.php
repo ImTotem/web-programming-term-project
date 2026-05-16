@@ -213,8 +213,8 @@ $currentUser = auth_current_user();
                     </div>
 
                     <div>
-                        <label for="note-menu">대표 메뉴</label>
-                        <input id="note-menu" name="menu" type="text" placeholder="예: 쇼유라멘, 트러플 감자튀김">
+                        <label for="note-menu">먹은 메뉴</label>
+                        <input id="note-menu" name="menu" type="text" placeholder="예: 쇼유라멘과 교자, 트러플 감자튀김">
                     </div>
 
                     <div>
