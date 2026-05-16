@@ -115,6 +115,11 @@ assert(
 );
 
 assert(
+    /note-form\s*>\s*\*\s*\{[^}]*min-width:\s*0/s.test(css) && /file-upload-preview\s*\{[^}]*max-width:\s*100%/s.test(css),
+    'uploaded photo preview strip should not expand the modal or push action buttons sideways'
+);
+
+assert(
     /selectedPhotoFiles/.test(app) && /appendSelectedPhotos/.test(app) && /syncPhotoInput/.test(app) && /new DataTransfer/.test(app),
     'newly selected photos should be appended instead of replacing previous selections'
 );

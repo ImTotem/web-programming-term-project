@@ -657,6 +657,10 @@ main {
     margin-top: 20px;
 }
 
+.note-form > * {
+    min-width: 0;
+}
+
 .note-form input:not([type="hidden"]):not([type="file"]),
 .note-form textarea,
 .file-upload-preview,
@@ -676,6 +680,7 @@ main {
 
 .file-upload-control {
     width: 100%;
+    min-width: 0;
 }
 
 .file-upload-header {
@@ -767,6 +772,8 @@ main {
 }
 
 .file-upload-preview {
+    max-width: 100%;
+    min-width: 0;
     margin-top: 10px;
     overflow-x: auto;
     overflow-y: hidden;
