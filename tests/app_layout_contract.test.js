@@ -204,8 +204,8 @@ assert(
 );
 
 assert(
-    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css) && /\.record-quick-actions button:nth-child\(1\)/.test(css) && /\.record-quick-actions button:nth-child\(2\)/.test(css),
-    'recorded place actions should use a radial icon speed dial'
+    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css) && /data-fab-icon="add-note"/.test(index) && /data-fab-icon="edit-note"/.test(index) && /--fab-open-x/.test(css) && /--fab-open-y/.test(css) && /cubic-bezier/.test(css),
+    'recorded place actions should use a daisyUI-like animated flower speed dial with icon buttons'
 );
 
 assert(

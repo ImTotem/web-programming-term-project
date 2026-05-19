@@ -461,10 +461,10 @@ main {
 
 .map-fab-dock {
     position: absolute;
-    right: 22px;
-    bottom: 22px;
-    width: 168px;
-    height: 168px;
+    right: 24px;
+    bottom: 24px;
+    width: 196px;
+    height: 196px;
     z-index: 3;
     pointer-events: none;
 }
@@ -472,7 +472,12 @@ main {
 .record-quick-actions {
     position: absolute;
     inset: 0;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: right bottom;
+    transition:
+        opacity 0.18s ease,
+        transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
 }
 
@@ -481,11 +486,13 @@ main {
 }
 
 .record-quick-actions button {
+    --fab-open-x: 0px;
+    --fab-open-y: 0px;
     position: absolute;
-    right: 18px;
-    bottom: 18px;
-    width: 52px;
-    height: 52px;
+    right: 7px;
+    bottom: 7px;
+    width: 58px;
+    height: 58px;
     display: grid;
     place-items: center;
     border: 1px solid rgba(240, 240, 243, 0.14);
@@ -500,20 +507,38 @@ main {
     line-height: 1;
     cursor: pointer;
     backdrop-filter: blur(16px);
-    transition: background 0.16s ease, transform 0.18s ease, box-shadow 0.16s ease;
+    transform: translate(var(--fab-open-x), var(--fab-open-y)) scale(1);
+    transform-origin: center;
+    opacity: 1;
+    transition:
+        background 0.16s ease,
+        box-shadow 0.16s ease,
+        opacity 0.16s ease,
+        transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: auto;
 }
 
 .record-quick-actions button:nth-child(1) {
-    transform: translate(-82px, -18px);
+    --fab-open-x: -92px;
+    --fab-open-y: -24px;
+    transition-delay: 0.02s;
 }
 
 .record-quick-actions button:nth-child(2) {
-    transform: translate(-44px, -86px);
+    --fab-open-x: -34px;
+    --fab-open-y: -112px;
+    transition-delay: 0.06s;
 }
 
-.record-quick-actions button span {
-    transform: translateY(-1px);
+.record-quick-actions svg,
+.map-fab svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.4;
 }
 
 .record-quick-actions button:hover {
@@ -522,11 +547,11 @@ main {
 }
 
 .record-quick-actions button:nth-child(1):hover {
-    transform: translate(-82px, -20px);
+    transform: translate(var(--fab-open-x), calc(var(--fab-open-y) - 2px)) scale(1.04);
 }
 
 .record-quick-actions button:nth-child(2):hover {
-    transform: translate(-44px, -88px);
+    transform: translate(var(--fab-open-x), calc(var(--fab-open-y) - 2px)) scale(1.04);
 }
 
 .map-speed-dial-action {
@@ -537,8 +562,8 @@ main {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 74px;
-    height: 74px;
+    width: 72px;
+    height: 72px;
     display: grid;
     place-items: center;
     border: 0;
@@ -555,9 +580,14 @@ main {
     pointer-events: auto;
 }
 
+.map-fab span {
+    display: block;
+    transform: translateY(-1px);
+}
+
 .map-fab:hover {
     background: var(--primary-active);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .map-fab-dock[data-mode="recorded"] .map-fab {
@@ -571,7 +601,9 @@ main {
 }
 
 .map-fab-dock[data-speed-dial="closed"] .record-quick-actions button {
-    transform: translate(0, 0);
+    opacity: 0;
+    transform: translate(0, 0) scale(0.35);
+    transition-delay: 0s;
 }
 
 .app-map {

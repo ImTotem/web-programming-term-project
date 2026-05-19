@@ -148,11 +148,16 @@ $currentUser = auth_current_user();
                 </div>
                 <div id="map-fab-dock" class="map-fab-dock" data-mode="manual" data-speed-dial="closed">
                     <div class="record-quick-actions" hidden>
-                        <button type="button" class="map-speed-dial-action" data-action="add-note" aria-label="기록 추가" title="기록 추가">
-                            <span aria-hidden="true">+</span>
+                        <button type="button" class="map-speed-dial-action" data-action="add-note" data-fab-icon="add-note" aria-label="기록 추가" title="기록 추가">
+                            <svg aria-hidden="true" viewBox="0 0 24 24">
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
                         </button>
-                        <button type="button" class="map-speed-dial-action" data-action="edit-note" aria-label="기록 수정" title="기록 수정">
-                            <span aria-hidden="true">✎</span>
+                        <button type="button" class="map-speed-dial-action" data-action="edit-note" data-fab-icon="edit-note" aria-label="기록 수정" title="기록 수정">
+                            <svg aria-hidden="true" viewBox="0 0 24 24">
+                                <path d="M4 20h4l11-11a2.8 2.8 0 0 0-4-4L4 16v4Z" />
+                                <path d="M13.5 6.5l4 4" />
+                            </svg>
                         </button>
                     </div>
                     <button type="button" class="map-fab" data-action="primary-map-action" aria-label="지도에서 직접 추가" aria-expanded="false">
