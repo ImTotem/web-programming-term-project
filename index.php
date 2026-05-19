@@ -25,6 +25,7 @@ $currentUser = auth_current_user();
         <nav class="nav">
             <?php if ($currentUser): ?>
                 <a href="#map-panel">지도</a>
+                <a href="records.php">기록</a>
                 <details class="profile-menu">
                     <summary><?= tastemap_h($currentUser['nickname']) ?>님</summary>
                     <div class="profile-menu-list">

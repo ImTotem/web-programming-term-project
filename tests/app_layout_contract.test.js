@@ -7,6 +7,9 @@ const app = fs.readFileSync('assets/js/app.js', 'utf8');
 const profile = fs.existsSync('profile.php') ? fs.readFileSync('profile.php', 'utf8') : '';
 const schema = fs.readFileSync('db/schema.sql', 'utf8');
 const saveNoteApi = fs.existsSync('api/save_note.php') ? fs.readFileSync('api/save_note.php', 'utf8') : '';
+const notesApi = fs.existsSync('api/notes.php') ? fs.readFileSync('api/notes.php', 'utf8') : '';
+const placeSearch = fs.existsSync('api/place_search.php') ? fs.readFileSync('api/place_search.php', 'utf8') : '';
+const recordsPage = fs.existsSync('records.php') ? fs.readFileSync('records.php', 'utf8') : '';
 const notes = fs.existsSync('includes/notes.php') ? fs.readFileSync('includes/notes.php', 'utf8') : '';
 const htaccess = fs.existsSync('.htaccess') ? fs.readFileSync('.htaccess', 'utf8') : '';
 
@@ -83,6 +86,16 @@ assert(
 assert(
     /notes_save_visit/.test(saveNoteApi) && /INSERT INTO visits/.test(notes) && /INSERT INTO visit_photos/.test(notes) && /INSERT INTO restaurants/.test(notes),
     'save note API should persist restaurant, visit, and uploaded photos'
+);
+
+assert(
+    /notes_list_visits/.test(notes) && /notes_list_visits/.test(notesApi + recordsPage) && /records\.php/.test(index),
+    'saved culinary records should have a list query API and page'
+);
+
+assert(
+    /notes_record_summaries_by_place_ids/.test(notes) && /notes_record_summaries_by_place_ids/.test(placeSearch) && /has_record/.test(app),
+    'search results should be enriched with existing record state after refresh'
 );
 
 assert(

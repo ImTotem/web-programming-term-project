@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/notes.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -61,5 +61,29 @@ if ($response === false) {
     exit;
 }
 
-echo $response;
+$data = json_decode($response, true);
+if (!is_array($data)) {
+    echo $response;
+    exit;
+}
 
+$user = auth_current_user();
+if ($user && !empty($data['documents']) && is_array($data['documents'])) {
+    $placeIds = [];
+    foreach ($data['documents'] as $document) {
+        if (!empty($document['id'])) {
+            $placeIds[] = (string) $document['id'];
+        }
+    }
+
+    $summaries = notes_record_summaries_by_place_ids((int) $user['id'], $placeIds);
+    foreach ($data['documents'] as &$document) {
+        $placeId = isset($document['id']) ? (string) $document['id'] : '';
+        if ($placeId !== '' && isset($summaries[$placeId])) {
+            $document = array_merge($document, $summaries[$placeId]);
+        }
+    }
+    unset($document);
+}
+
+echo json_encode($data, JSON_UNESCAPED_UNICODE);

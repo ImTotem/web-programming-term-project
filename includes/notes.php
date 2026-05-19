@@ -49,6 +49,116 @@ function notes_save_visit($userId, array $payload, array $files)
     }
 }
 
+function notes_list_visits($userId, $limit = 50)
+{
+    $conn = tastemap_db();
+    $limit = max(1, min(100, (int) $limit));
+    $stmt = $conn->prepare(
+        'SELECT
+            v.id,
+            v.visit_date,
+            v.menu_name,
+            v.rating,
+            v.note,
+            v.created_at,
+            r.id AS restaurant_id,
+            r.kakao_place_id,
+            r.name AS place_name,
+            r.category_name,
+            r.address_name,
+            r.road_address_name,
+            r.phone,
+            r.place_url,
+            r.latitude,
+            r.longitude,
+            g.id AS group_id,
+            g.name AS group_name,
+            GROUP_CONCAT(vp.file_path ORDER BY vp.sort_order ASC SEPARATOR "\n") AS photo_paths
+         FROM visits v
+         INNER JOIN restaurants r ON r.id = v.restaurant_id
+         INNER JOIN groups g ON g.id = v.group_id
+         INNER JOIN group_members gm ON gm.group_id = g.id AND gm.user_id = ?
+         LEFT JOIN visit_photos vp ON vp.visit_id = v.id
+         GROUP BY v.id
+         ORDER BY v.visit_date DESC, v.id DESC
+         LIMIT ?'
+    );
+    $stmt->bind_param('ii', $userId, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $records = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $photoPaths = [];
+        if (!empty($row['photo_paths'])) {
+            $photoPaths = explode("\n", $row['photo_paths']);
+        }
+        unset($row['photo_paths']);
+        $row['photos'] = $photoPaths;
+        $records[] = $row;
+    }
+
+    $stmt->close();
+
+    return $records;
+}
+
+function notes_record_summaries_by_place_ids($userId, array $placeIds)
+{
+    $placeIds = array_values(array_unique(array_filter(array_map('strval', $placeIds))));
+    if (!$placeIds) {
+        return [];
+    }
+
+    $conn = tastemap_db();
+    $placeholders = implode(',', array_fill(0, count($placeIds), '?'));
+    $sql =
+        'SELECT
+            r.kakao_place_id,
+            MAX(v.id) AS record_id,
+            COUNT(v.id) AS visit_count,
+            MAX(v.visit_date) AS latest_visit_date,
+            MAX(sp.status) AS saved_status,
+            AVG(v.rating) AS average_rating
+         FROM restaurants r
+         INNER JOIN saved_places sp ON sp.restaurant_id = r.id
+         INNER JOIN group_members gm ON gm.group_id = sp.group_id AND gm.user_id = ?
+         LEFT JOIN visits v ON v.restaurant_id = r.id AND v.group_id = sp.group_id
+         WHERE r.kakao_place_id IN (' . $placeholders . ')
+         GROUP BY r.kakao_place_id';
+
+    $stmt = $conn->prepare($sql);
+    $params = array_merge([(int) $userId], $placeIds);
+    notes_bind_params($stmt, 'i' . str_repeat('s', count($placeIds)), $params);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $summaries = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $summaries[$row['kakao_place_id']] = [
+            'has_record' => ((int) $row['visit_count']) > 0,
+            'record_id' => $row['record_id'] ? (int) $row['record_id'] : null,
+            'visit_count' => (int) $row['visit_count'],
+            'latest_visit_date' => $row['latest_visit_date'],
+            'saved_status' => $row['saved_status'],
+            'average_rating' => $row['average_rating'] !== null ? round((float) $row['average_rating'], 1) : null,
+        ];
+    }
+
+    $stmt->close();
+
+    return $summaries;
+}
+
+function notes_bind_params(mysqli_stmt $stmt, $types, array &$params)
+{
+    $refs = [$types];
+    foreach ($params as $key => &$value) {
+        $refs[] = &$value;
+    }
+    call_user_func_array([$stmt, 'bind_param'], $refs);
+}
+
 function notes_ensure_default_group(mysqli $conn, $userId)
 {
     $stmt = $conn->prepare(

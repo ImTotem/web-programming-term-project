@@ -87,6 +87,15 @@ $secondResult = notes_save_visit($userId, $payload, []);
 assert_true($secondResult['ok'] === true, '이미 저장된 같은 장소에도 기록이 추가 저장되어야 합니다.');
 assert_true((int) $secondResult['visit_id'] > 0, '두 번째 방문 기록 ID가 있어야 합니다.');
 
+$records = notes_list_visits($userId);
+assert_true(count($records) >= 2, '저장된 미식 기록 목록을 조회할 수 있어야 합니다.');
+assert_true($records[0]['place_name'] === '노트 저장 테스트 식당', '목록에는 식당 이름이 포함되어야 합니다.');
+assert_true($records[0]['menu_name'] === '두 번째 테스트 메뉴', '목록은 최신 기록을 먼저 보여야 합니다.');
+
+$summaries = notes_record_summaries_by_place_ids($userId, ['note-smoke-place-' . $userId]);
+assert_true(isset($summaries['note-smoke-place-' . $userId]), '카카오 장소 ID로 기존 기록 여부를 조회할 수 있어야 합니다.');
+assert_true((int) $summaries['note-smoke-place-' . $userId]['visit_count'] >= 2, '장소별 기록 개수가 요약되어야 합니다.');
+
 $oversizedPhoto = [
     'photos' => [
         'name' => ['too-large.png'],
