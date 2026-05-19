@@ -191,13 +191,18 @@ assert(
 );
 
 assert(
-    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css),
-    'recorded place actions should use a speed dial style FAB'
+    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css) && /\.record-quick-actions button:nth-child\(1\)/.test(css) && /\.record-quick-actions button:nth-child\(2\)/.test(css),
+    'recorded place actions should use a radial icon speed dial'
 );
 
 assert(
     /\.map-fab-dock/.test(css) && /border-radius:\s*50%/.test(css),
     'map action should be a circular bottom-right button'
+);
+
+assert(
+    /id="app-feedback-modal"/.test(index) && /function showFeedbackModal/.test(app) && !/alert\(/.test(app),
+    'app feedback should use an in-app modal instead of browser alerts'
 );
 
 assert(

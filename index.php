@@ -147,8 +147,12 @@ $currentUser = auth_current_user();
                 </div>
                 <div id="map-fab-dock" class="map-fab-dock" data-mode="manual" data-speed-dial="closed">
                     <div class="record-quick-actions" hidden>
-                        <button type="button" class="map-speed-dial-action" data-action="add-note">기록 추가</button>
-                        <button type="button" class="map-speed-dial-action" data-action="edit-note">수정</button>
+                        <button type="button" class="map-speed-dial-action" data-action="add-note" aria-label="기록 추가" title="기록 추가">
+                            <span aria-hidden="true">+</span>
+                        </button>
+                        <button type="button" class="map-speed-dial-action" data-action="edit-note" aria-label="기록 수정" title="기록 수정">
+                            <span aria-hidden="true">✎</span>
+                        </button>
                     </div>
                     <button type="button" class="map-fab" data-action="primary-map-action" aria-label="지도에서 직접 추가" aria-expanded="false">
                         <span id="map-fab-symbol" aria-hidden="true">+</span>
@@ -250,6 +254,17 @@ $currentUser = auth_current_user();
                         <button type="submit" class="button primary" data-action="save-note">기록 저장</button>
                     </div>
                 </form>
+            </section>
+        </div>
+
+        <div id="app-feedback-modal" class="modal-backdrop feedback-backdrop" hidden>
+            <section class="feedback-card" role="alertdialog" aria-modal="true" aria-labelledby="feedback-title" aria-describedby="feedback-message">
+                <p class="eyebrow" id="feedback-kicker">TasteMap</p>
+                <h2 id="feedback-title">알림</h2>
+                <p id="feedback-message"></p>
+                <div class="modal-actions">
+                    <button type="button" class="button primary" data-action="close-feedback-modal">확인</button>
+                </div>
             </section>
         </div>
     </main>

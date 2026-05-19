@@ -255,7 +255,7 @@
         dock.dataset.speedDial = hasRecord ? 'open' : 'closed';
         fab.setAttribute('aria-label', hasRecord ? '기록 작업 메뉴' : '기록 작성');
         fab.setAttribute('aria-expanded', hasRecord ? 'true' : 'false');
-        symbol.textContent = hasRecord ? '⋯' : '✎';
+        symbol.textContent = '✎';
     }
 
     function updateResultCount(count) {
@@ -347,6 +347,8 @@
                 }
             });
         }
+
+        bindFeedbackModal();
     }
 
     function toggleSpeedDial() {
@@ -376,7 +378,7 @@
             event.preventDefault();
 
             if (!selectedPlace) {
-                alert('기록할 장소를 먼저 선택하세요.');
+                showFeedbackModal('기록할 장소를 먼저 선택하세요.', '장소 선택 필요');
                 return;
             }
 
@@ -404,10 +406,10 @@
                     updateFabState(selectedPlace);
                     resetNoteForm(form);
                     closeNoteModal();
-                    alert('미식 기록을 저장했습니다.');
+                    showFeedbackModal('미식 기록을 저장했습니다.', '저장 완료');
                 })
                 .catch(function (error) {
-                    alert(error.message);
+                    showFeedbackModal(error.message, '저장 실패');
                 })
                 .finally(function () {
                     saveButton.disabled = false;
@@ -441,6 +443,40 @@
         if (modal) {
             modal.hidden = true;
         }
+    }
+
+    function showFeedbackModal(message, title) {
+        var modal = $('#app-feedback-modal');
+        var titleEl = $('#feedback-title');
+        var messageEl = $('#feedback-message');
+
+        if (!modal || !titleEl || !messageEl) {
+            return;
+        }
+
+        titleEl.textContent = title || '알림';
+        messageEl.textContent = message || '';
+        modal.hidden = false;
+    }
+
+    function closeFeedbackModal() {
+        var modal = $('#app-feedback-modal');
+        if (modal) {
+            modal.hidden = true;
+        }
+    }
+
+    function bindFeedbackModal() {
+        var modal = $('#app-feedback-modal');
+        if (!modal) {
+            return;
+        }
+
+        modal.addEventListener('click', function (event) {
+            if (event.target === modal || event.target.closest('[data-action="close-feedback-modal"]')) {
+                closeFeedbackModal();
+            }
+        });
     }
 
     function bindFileUpload() {

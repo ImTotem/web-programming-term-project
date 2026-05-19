@@ -459,18 +459,17 @@ main {
     position: absolute;
     right: 22px;
     bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    width: 168px;
+    height: 168px;
     z-index: 3;
+    pointer-events: none;
 }
 
 .record-quick-actions {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    transform-origin: right center;
-    transition: opacity 0.16s ease, transform 0.16s ease;
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
 }
 
 .record-quick-actions[hidden] {
@@ -478,23 +477,52 @@ main {
 }
 
 .record-quick-actions button {
-    min-height: 58px;
-    border: 1px solid rgba(220, 222, 224, 0.94);
-    border-radius: 9999px;
-    padding: 0 26px;
-    background: rgba(255, 255, 255, 0.96);
-    color: var(--ink);
-    box-shadow: 0 18px 44px rgba(23, 23, 23, 0.18);
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(240, 240, 243, 0.14);
+    border-radius: 50%;
+    padding: 0;
+    background: rgba(23, 23, 23, 0.94);
+    color: var(--on-dark);
+    box-shadow: 0 14px 36px rgba(23, 23, 23, 0.24);
     font: inherit;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 600;
+    line-height: 1;
     cursor: pointer;
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(16px);
+    transition: background 0.16s ease, transform 0.18s ease, box-shadow 0.16s ease;
+    pointer-events: auto;
+}
+
+.record-quick-actions button:nth-child(1) {
+    transform: translate(-82px, -18px);
+}
+
+.record-quick-actions button:nth-child(2) {
+    transform: translate(-44px, -86px);
+}
+
+.record-quick-actions button span {
+    transform: translateY(-1px);
 }
 
 .record-quick-actions button:hover {
-    background: #fff;
-    transform: translateY(-1px);
+    background: var(--primary-active);
+    box-shadow: 0 18px 42px rgba(23, 23, 23, 0.28);
+}
+
+.record-quick-actions button:nth-child(1):hover {
+    transform: translate(-82px, -20px);
+}
+
+.record-quick-actions button:nth-child(2):hover {
+    transform: translate(-44px, -88px);
 }
 
 .map-speed-dial-action {
@@ -502,8 +530,11 @@ main {
 }
 
 .map-fab {
-    width: 86px;
-    height: 86px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 74px;
+    height: 74px;
     display: grid;
     place-items: center;
     border: 0;
@@ -512,11 +543,12 @@ main {
     color: var(--on-primary);
     box-shadow: 0 16px 40px rgba(23, 23, 23, 0.26);
     font: inherit;
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 600;
     line-height: 1;
     cursor: pointer;
     transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+    pointer-events: auto;
 }
 
 .map-fab:hover {
@@ -524,22 +556,18 @@ main {
     transform: translateY(-1px);
 }
 
-.map-fab-dock[data-mode="manual"] .map-fab,
-.map-fab-dock[data-mode="record"] .map-fab {
-    width: 66px;
-    height: 66px;
-    font-size: 25px;
-}
-
 .map-fab-dock[data-mode="recorded"] .map-fab {
-    background: var(--text-link);
-    letter-spacing: 3px;
+    background: var(--primary);
 }
 
 .map-fab-dock[data-speed-dial="closed"] .record-quick-actions {
     opacity: 0;
-    transform: translateX(10px) scale(0.96);
+    transform: scale(0.82);
     pointer-events: none;
+}
+
+.map-fab-dock[data-speed-dial="closed"] .record-quick-actions button {
+    transform: translate(0, 0);
 }
 
 .app-map {
@@ -636,6 +664,30 @@ main {
     font-size: 24px;
     font-weight: 600;
     line-height: 1.2;
+}
+
+.feedback-card {
+    width: min(100%, 360px);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    background: var(--surface-card);
+    box-shadow: 0 24px 70px rgba(23, 23, 23, 0.2);
+}
+
+.feedback-card h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.feedback-card p:not(.eyebrow) {
+    margin: 12px 0 0;
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.55;
 }
 
 .icon-button {
