@@ -75,9 +75,9 @@
                 '<strong>' + escapeHtml(place.place_name) + '</strong>' +
                 '<span>' + escapeHtml(place.road_address_name || place.address_name || '') + '</span>' +
                 '<small>' + escapeHtml(place.category_name || '') + '</small>' +
-                (place.has_record ? '<em class="record-state-badge">기록 ' + escapeHtml(place.visit_count || 1) + '개</em>' : '') +
                 '<div class="place-actions">' +
                     '<a href="' + escapeHtml(place.place_url) + '" target="_blank" rel="noreferrer" data-skip-focus="true">카카오맵에서 보기</a>' +
+                    (place.has_record ? '<em class="record-state-badge">기록 ' + escapeHtml(place.visit_count || 1) + '개</em>' : '') +
                 '</div>';
             list.appendChild(item);
 

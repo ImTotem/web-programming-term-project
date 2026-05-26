@@ -99,6 +99,11 @@ assert(
 );
 
 assert(
+    app.indexOf('카카오맵에서 보기') < app.indexOf('record-state-badge') && /place-actions[\s\S]*justify-content:\s*space-between/.test(css) && /record-state-badge[\s\S]*margin-left:\s*auto/.test(css),
+    'record count badge should align to the right of the Kakao map link'
+);
+
+assert(
     index.indexOf('id="note-photo"') < index.indexOf('id="note-menu"'),
     'photo upload should appear before menu and note fields'
 );

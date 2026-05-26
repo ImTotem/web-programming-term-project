@@ -1274,8 +1274,10 @@ select:focus {
 
 .record-state-badge {
     display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
     width: fit-content;
-    margin-top: 8px;
+    margin-left: auto;
     border-radius: 9999px;
     padding: 4px 9px;
     background: var(--surface-strong);
@@ -1297,8 +1299,14 @@ select:focus {
 .place-actions {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     gap: 8px;
     margin-top: 12px;
+}
+
+.place-actions a {
+    margin-top: 0;
 }
 
 .place-actions a,
