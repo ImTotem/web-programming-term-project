@@ -525,8 +525,8 @@ main {
 }
 
 .record-quick-actions button:nth-child(2) {
-    --fab-open-x: -34px;
-    --fab-open-y: -76px;
+    --fab-open-x: -20px;
+    --fab-open-y: -62px;
     transition-delay: 0.06s;
 }
 

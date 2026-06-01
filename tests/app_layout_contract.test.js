@@ -214,6 +214,11 @@ assert(
 );
 
 assert(
+    /button:nth-child\(2\)[\s\S]*--fab-open-x:\s*-20px[\s\S]*--fab-open-y:\s*-62px/.test(css),
+    'edit speed dial action should sit on the same visual arc as the add action'
+);
+
+assert(
     /\.map-fab-dock/.test(css) && /border-radius:\s*50%/.test(css),
     'map action should be a circular bottom-right button'
 );
