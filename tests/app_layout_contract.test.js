@@ -209,7 +209,7 @@ assert(
 );
 
 assert(
-    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css) && /data-fab-icon="add-note"/.test(index) && /data-fab-icon="edit-note"/.test(index) && /--fab-open-x/.test(css) && /--fab-open-y/.test(css) && /cubic-bezier/.test(css),
+    /data-speed-dial/.test(index) && /aria-expanded/.test(app) && /map-speed-dial-action/.test(css) && /data-fab-icon="add-note"/.test(index) && /data-fab-icon="edit-note"/.test(index) && /--fab-open-x/.test(css) && /--fab-open-y/.test(css) && /cubic-bezier/.test(css) && /width:\s*152px/.test(css),
     'recorded place actions should use a daisyUI-like animated flower speed dial with icon buttons'
 );
 
